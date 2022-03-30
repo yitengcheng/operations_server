@@ -10,6 +10,6 @@ module.exports = {
     /^\/api\/applet\/template/,
     /^\/api\/oss\/upload/,
     /^\/api\/applet\/reportFault/,
-    /^\/applet/,
+    /^\/applet\/*/,
   ], // 接口白名单
 };
