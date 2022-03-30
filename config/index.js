@@ -6,6 +6,7 @@ module.exports = {
   unlessList: [
     /^\/api\/app\/login/,
     /^\/api\/addRouter/,
+    /^\/api\/addCompany/,
     /^\/api\/applet\/template/,
     /^\/api\/oss\/upload/,
     /^\/api\/applet\/reportFault/,

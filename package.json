@@ -12,6 +12,7 @@
     "axios": "^0.26.1",
     "dayjs": "^1.11.0",
     "debug": "^4.1.1",
+    "images": "^3.2.4",
     "jpush-async": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
@@ -30,7 +31,10 @@
     "pinyin-pro": "^3.8.2",
     "pug": "^2.0.3",
     "qiniu": "^7.4.0",
-    "tencentcloud-sdk-nodejs": "^4.0.316"
+    "qr-image": "^3.2.0",
+    "svg2png": "^4.1.1",
+    "tencentcloud-sdk-nodejs": "^4.0.316",
+    "text-to-svg": "^3.1.5"
   },
   "devDependencies": {
     "log4js": "^6.3.0",
