@@ -51,7 +51,7 @@ router.post("/assets/downOneQr", async (ctx) => {
         );
       })
       .catch((e) => console.error(e));
-    const imgBase64 = resQR.toString("base64");
+    const imgBase64 = resQR?.toString("base64");
     ctx.body = util.success({ imgBase64: `data:image/png;base64,${imgBase64}` });
   } catch (error) {
     ctx.body = util.fail(error.stack);
