@@ -39,7 +39,9 @@ router.post("/assets/downOneQr", async (ctx) => {
     const resQR = await svg2png(tSvg)
       .then((rst) => {
         const textImage = images(rst);
-        const qrImage = images(qr.imageSync(id, { type: "png" })).size(w - margin * 2); // 二维码的尺寸为：模板图片的宽度减去左右边距
+        const qrImage = images(
+          qr.imageSync(`https://yyyw.qiantur.com/applet/companyId=${user.companyId}&assetsId=${id}`, { type: "png" })
+        ).size(w - margin * 2); // 二维码的尺寸为：模板图片的宽度减去左右边距
         return (
           sourceImage
             .draw(qrImage, margin, top) // 二维码的位置：x=左边距，y=top

@@ -8,7 +8,7 @@ const log4j = require("../../utils/log4");
 
 router.post("/applet/template", async (ctx) => {
   try {
-    const { companyId } = ctx.request.body;
+    const { companyId = "" } = ctx.request.body;
     const res = await CompanyTemplate.findOne({ companyId, type: "2" });
     ctx.body = util.success(res ?? {});
   } catch (error) {
