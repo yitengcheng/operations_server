@@ -1,5 +1,5 @@
 /**
- * 添加值班接口
+ * 添加值班接口(旧)
  */
 const router = require("koa-router")();
 const Scheduling = require("../../models/schedulingSchema");
