@@ -6,6 +6,7 @@ const convertReport = require("./convertReport");
 const conclusionReport = require("./conclusionReport");
 const refuseReport = require("./refuseReport");
 const reportFault = require("./reportFault");
+const reportDetail = require("./reportDetail");
 
 module.exports = {
   myreport,
@@ -16,4 +17,5 @@ module.exports = {
   conclusionReport,
   refuseReport,
   reportFault,
+  reportDetail,
 };
