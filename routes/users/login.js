@@ -35,7 +35,7 @@ router.post("/app/login", async (ctx) => {
     ).populate("roleId", { name: 1 });
     const token = jwt.sign({ ...res?._doc }, "cdxs", { expiresIn: "1h" });
     if (res) {
-      ctx.body = util.success({ token, userInfo: res });
+      ctx.body = util.success({ token, userInfo: res }, "登录成功");
     } else {
       ctx.body = util.fail("", "账号或密码不正确");
     }

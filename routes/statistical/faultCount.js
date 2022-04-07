@@ -1,5 +1,5 @@
 /**
- * 资产总数接口
+ * 故障工单总数接口
  */
 const router = require("koa-router")();
 const CompanyTemplate = require("../../models/companyTemplateSchema");
@@ -22,7 +22,8 @@ router.post("/report/app/fault", async (ctx) => {
     const faultTotal = await faultModule.countDocuments();
     const faultCompleteTotal = await faultModule.countDocuments({ status: 2 });
     const faultPendingTotal = await faultModule.countDocuments({ status: 1 });
-    ctx.body = util.success({ faultTotal, faultCompleteTotal, faultPendingTotal });
+    const faultRefuseTotal = await faultModule.countDocuments({ status: 3 });
+    ctx.body = util.success({ faultTotal, faultCompleteTotal, faultPendingTotal, faultRefuseTotal });
   } catch (error) {
     ctx.body = util.fail(error.stack);
   }
