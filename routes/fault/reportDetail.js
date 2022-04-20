@@ -3,6 +3,7 @@
  */
 const router = require("koa-router")();
 const CompanyTemplate = require("../../models/companyTemplateSchema");
+const User = require("../../models/userSchema");
 const util = require("../../utils/util");
 const log4j = require("../../utils/log4");
 const mongoose = require("mongoose");
@@ -30,12 +31,14 @@ router.post("/fault/detail", async (ctx) => {
     }
     let guzhangSchema = await util.guzhangSchemaProperty(faultTemplate.content);
     let assetSchema = await util.schemaProperty(assetTemplate.content);
+    let assetSelect = await util.schemaSelect(assetTemplate.content);
     const db = mongoose.createConnection(config.URL);
     let faultModule = db.model(faultTemplate.moduleName, guzhangSchema, faultTemplate.moduleName);
     let assetModule = db.model(assetTemplate.moduleName, assetSchema, assetTemplate.moduleName);
     const fault = await faultModule.findById(faultId);
-    const asset = await assetModule.findById(fault.assetsId);
-    ctx.body = util.success({ fault, asset });
+    const asset = await assetModule.findById(fault.assetsId, assetSelect);
+    const dispose = await User.findById(fault.dispose);
+    ctx.body = util.success({ fault, asset, dispose });
   } catch (error) {
     ctx.body = util.fail(error.stack);
   }
