@@ -9,12 +9,14 @@ const log4j = require("../../utils/log4");
 
 router.post("/distribute/apply/list", async (ctx) => {
   try {
-    const { mixStatus } = ctx.request.body;
+    const { mixStatus, keyword } = ctx.request.body;
     const { page, skipIndex } = util.pager(ctx.request.body);
     const { user } = ctx.state;
+    const fuzzyQuery = util.fuzzyQuery(["dutyTime", "mixRemark", "reason"], keyword);
     let params = {
       companyId: user.companyId,
       status: mixStatus,
+      ...fuzzyQuery,
     };
     const role = await Role.findOne({ _id: user.roleId._id });
     if (role && role.name == "运维工人") {

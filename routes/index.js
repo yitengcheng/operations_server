@@ -8,6 +8,7 @@ const inspection = require("./inspection");
 const companyTemplate = require("./companyTemplate");
 const asset = require("./asset");
 const statistical = require("./statistical");
+const texus = require("./texus");
 
 const routers = {
   ...users,
@@ -20,6 +21,7 @@ const routers = {
   ...companyTemplate,
   ...asset,
   ...statistical,
+  ...texus,
 };
 
 module.exports = routers;
