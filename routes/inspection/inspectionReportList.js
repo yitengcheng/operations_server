@@ -9,11 +9,12 @@ const log4j = require("../../utils/log4");
 
 router.post("/patrol/list", async (ctx) => {
   try {
-    const { keyword } = ctx.request.body;
+    const { keyword, createTime } = ctx.request.body;
     const { page, skipIndex } = util.pager(ctx.request.body);
     const { user } = ctx.state;
     const fuzzyQuery = util.fuzzyQuery(["remark"], keyword);
-    let params = { companyId: user.companyId, ...fuzzyQuery };
+    let createTimeParams = createTime && { createTime };
+    let params = { companyId: user.companyId, ...createTimeParams, ...fuzzyQuery };
     const role = await Role.findById(user.roleId);
     if (role.name === "运维工人") {
       params.reportUser = user._id;

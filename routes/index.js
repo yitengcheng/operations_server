@@ -9,6 +9,7 @@ const companyTemplate = require("./companyTemplate");
 const asset = require("./asset");
 const statistical = require("./statistical");
 const texus = require("./texus");
+const taintedChicken = require("./taintedChicken");
 
 const routers = {
   ...users,
@@ -22,6 +23,7 @@ const routers = {
   ...asset,
   ...statistical,
   ...texus,
+  ...taintedChicken,
 };
 
 module.exports = routers;
