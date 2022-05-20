@@ -1,9 +1,12 @@
 /**
  * 通用工具函数
  */
-const { result } = require("lodash");
 const log4js = require("./log4");
 const axios = require("axios");
+const mock = require("mockjs");
+const _ = require("lodash");
+const dayjs = require("dayjs");
+
 const CODE = {
   SUCCESS: 200,
   PARAM_ERROR: 101, //参数错误
@@ -92,8 +95,8 @@ module.exports = {
           default:
             break;
         }
-        resolve(res);
       }
+      resolve(res);
     });
   },
   guzhangSchemaProperty(content) {
@@ -147,23 +150,110 @@ module.exports = {
           default:
             break;
         }
-        resolve({
-          ...res,
-          reportUser: mongoose.Types.ObjectId,
-          assetsId: mongoose.Types.ObjectId,
-          status: Number,
-          cc: mongoose.Types.ObjectId,
-          oldDispose: [mongoose.Types.ObjectId],
-          dispose: mongoose.Types.ObjectId,
-          createTime: String,
-          designateTime: String,
-          phoneNumber: String,
-          remark: String,
-          conclusion: String,
-          conclusionPhoto: [String],
-        });
       }
+      resolve({
+        reportUser: mongoose.Types.ObjectId,
+        assetsId: mongoose.Types.ObjectId,
+        status: Number,
+        cc: mongoose.Types.ObjectId,
+        oldDispose: [mongoose.Types.ObjectId],
+        dispose: mongoose.Types.ObjectId,
+        createTime: String,
+        designateTime: String,
+        phoneNumber: String,
+        remark: String,
+        conclusion: String,
+        conclusionPhoto: [String],
+        ...res,
+      });
     });
+  },
+  createAssets(content) {
+    let property = JSON.parse(content);
+    let res = {};
+    for (const item in property) {
+      switch (property[item].type) {
+        case "文字输入框":
+          res[property[item].label] = mock.Random.cword();
+          break;
+        case "数字输入框":
+          res[property[item].label] = mock.Random.natural();
+          break;
+        case "多行文字输入框":
+          res[property[item].label] = mock.Random.csentence();
+          break;
+        case "选择器":
+          res[property[item].label] = mock.Random.cword();
+          break;
+        case "单选框":
+          res[property[item].label] = mock.Random.cword();
+          break;
+        case "多选框":
+          res[property[item].label] = [mock.Random.cword(), mock.Random.cword()];
+          break;
+        case "图片选择":
+          res[property[item].label] = undefined;
+          break;
+        case "日期选择":
+          res[property[item].label] = mock.Random.date();
+          break;
+        case "日期范围选择":
+          res[property[item].label] = [mock.Random.date(), mock.Random.date()];
+          break;
+        default:
+          break;
+      }
+    }
+    return res;
+  },
+  createGuzhang(content, reportUser, assetsId) {
+    let property = JSON.parse(content);
+    let res = {};
+    for (const item in property) {
+      switch (property[item].type) {
+        case "文字输入框":
+          res[property[item].label] = mock.Random.cword();
+          break;
+        case "数字输入框":
+          res[property[item].label] = mock.Random.natural();
+          break;
+        case "多行文字输入框":
+          res[property[item].label] = mock.Random.csentence();
+          break;
+        case "选择器":
+          res[property[item].label] = mock.Random.cword();
+          break;
+        case "单选框":
+          res[property[item].label] = mock.Random.cword();
+          break;
+        case "多选框":
+          res[property[item].label] = [mock.Random.cword(), mock.Random.cword()];
+          break;
+        case "图片选择":
+          res[property[item].label] = undefined;
+          break;
+        case "日期选择":
+          res[property[item].label] = mock.Random.date();
+          break;
+        case "日期范围选择":
+          res[property[item].label] = [mock.Random.date(), mock.Random.date()];
+          break;
+        default:
+          break;
+      }
+    }
+    return {
+      reportUser,
+      assetsId,
+      status: _.random(1, 3),
+      dispose: reportUser,
+      createTime: `2022-${dayjs().add(1, "month").month()}-${_.random(1, 30)}`,
+      designateTime: `2022-${dayjs().add(1, "month").month()}-${_.random(1, 30)}`,
+      phoneNumber: "13984842424",
+      remark: mock.Random.csentence(),
+      conclusion: mock.Random.csentence(),
+      ...res,
+    };
   },
   schemaSelect(content) {
     let property = JSON.parse(content);
