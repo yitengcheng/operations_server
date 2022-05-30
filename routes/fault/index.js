@@ -7,6 +7,7 @@ const conclusionReport = require("./conclusionReport");
 const refuseReport = require("./refuseReport");
 const reportFault = require("./reportFault");
 const reportDetail = require("./reportDetail");
+const assistReport = require("./assistReport");
 
 module.exports = {
   myreport,
@@ -18,4 +19,5 @@ module.exports = {
   refuseReport,
   reportFault,
   reportDetail,
+  assistReport,
 };

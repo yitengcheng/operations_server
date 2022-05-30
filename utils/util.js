@@ -108,6 +108,7 @@ module.exports = {
      * assetsId: 资产ID
      * status： 故障状态 1 待处理 2 处理成功 3 拒绝处理
      * cc： 抄送给谁
+     * assistUser: 协助者
      * oldDispose： 原处理者
      * dispose： 处理者
      * createTime: 创建时间
@@ -156,6 +157,7 @@ module.exports = {
         assetsId: mongoose.Types.ObjectId,
         status: Number,
         cc: mongoose.Types.ObjectId,
+        assistUser: mongoose.Types.ObjectId,
         oldDispose: [mongoose.Types.ObjectId],
         dispose: mongoose.Types.ObjectId,
         createTime: String,

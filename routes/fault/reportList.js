@@ -10,7 +10,7 @@ const config = require("../../config");
 
 router.post("/fault/list", async (ctx) => {
   try {
-    const { type, keyword } = ctx.request.body; // 1 由我创建的工单 2 待我处理 3 抄送我的 4 已处理工单 5 工单总列表 6 待处理总列表 7 已处理完成总列表
+    const { type, keyword } = ctx.request.body; // 1 由我创建的工单 2 待我处理 3 抄送我的 4 已处理工单 5 工单总列表 6 待处理总列表 7 已处理完成总列表 8 分享给我的
     const { page, skipIndex } = util.pager(ctx.request.body);
     const { user } = ctx.state;
 
@@ -45,6 +45,9 @@ router.post("/fault/list", async (ctx) => {
     } else if (type == 7) {
       // 已处理完成总列表
       params = { status: 2, ...fuzzyQuery };
+    } else if (type == 8) {
+      // 分享我的
+      params = { assistUser: new mongoose.Types.ObjectId(user._id), ...fuzzyQuery };
     }
 
     const list = await faultModule.find(params).skip(skipIndex).limit(page.pageSize);

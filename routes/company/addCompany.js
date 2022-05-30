@@ -6,7 +6,7 @@ const Company = require("../../models/companySchema");
 const util = require("../../utils/util");
 const log4j = require("../../utils/log4");
 
-router.post("/addCompany", async (ctx) => {
+router.post("/company/addCompany", async (ctx) => {
   try {
     const { companyName, legalPersonName, contactPhone } = ctx.request.body;
     const res = await Company.findOne({ companyName });

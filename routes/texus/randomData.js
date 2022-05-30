@@ -44,7 +44,9 @@ router.post("/test/randomData", async (ctx) => {
       inspectionReport.save();
       const asset = new assetsModule(util.createAssets(assetsTemplate.content));
       asset.save();
-      const guzhang = new guzhangModule(util.createGuzhang(guzhangTemplate.content, staff._id, asset._id));
+      const guzhang = new guzhangModule(
+        util.createGuzhang(guzhangTemplate.content, _.sample(_.map(staff, "_id")), asset._id)
+      );
       guzhang.save();
     }
     ctx.body = util.success({}, "生成成功");
