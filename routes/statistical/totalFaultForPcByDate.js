@@ -18,11 +18,11 @@ router.post("/statistical/count/inspectionByDate", async (ctx) => {
       .match({
         companyId: mongoose.Types.ObjectId(user.companyId),
         createTime: {
-          $gte: dayjs(dayjs().startOf("month")).toISOString(),
-          $lte: dayjs(dayjs().endOf("month")).toISOString(),
+          $gte: dayjs(dayjs().startOf("month")).toDate(),
+          $lte: dayjs(dayjs().endOf("month")).toDate(),
         },
       })
-      .group({ _id: "$createTime", count: { $sum: 1 } });
+      .group({ _id: { $dateToString: { format: "%Y-%m-%d", date: "$createTime" } }, count: { $sum: 1 } });
     ctx.body = util.success(res);
   } catch (error) {
     ctx.body = util.fail(error.stack);

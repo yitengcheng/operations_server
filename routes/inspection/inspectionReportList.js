@@ -6,18 +6,24 @@ const InspectionReport = require("../../models/inspectionReportSchema");
 const Role = require("../../models/roleSchema");
 const util = require("../../utils/util");
 const log4j = require("../../utils/log4");
+const dayjs = require("dayjs");
 
 router.post("/patrol/list", async (ctx) => {
   try {
-    const { keyword, createTime, status } = ctx.request.body;
+    const { keyword, createTime, status = undefined } = ctx.request.body;
     const { page, skipIndex } = util.pager(ctx.request.body);
     const { user } = ctx.state;
     const fuzzyQuery = util.fuzzyQuery(["remark"], keyword);
-    let createTimeParams = createTime && { createTime };
-    let params = { companyId: user.companyId, status, ...createTimeParams, ...fuzzyQuery };
+    const statusParams = status ? { status } : {};
+    let createTimeParams = createTime && {
+      createTime: {
+        $gte: dayjs(dayjs(createTime).startOf("day")).toDate(),
+        $lte: dayjs(dayjs(createTime).endOf("day")).toDate(),
+      },
+    };
+    let params = { companyId: user.companyId, ...createTimeParams, ...statusParams, ...fuzzyQuery };
     const role = await Role.findById(user.roleId);
     if (role.name === "运维工人") {
-      params.reportUser = user._id;
       params["$or"] = [{ reportUser: user._id }, { headUser: user._id }];
     }
     const query = InspectionReport.find(params).populate([
