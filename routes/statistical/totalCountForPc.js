@@ -14,6 +14,14 @@ router.post("/statistical/totalCount", async (ctx) => {
     const { user } = ctx.state;
     const assetsTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: "1" });
     const faultTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: "2" });
+    if (!assetsTemplate) {
+      ctx.body = util.fail("", "请先在手机端设置资产模板");
+      return;
+    }
+    if (!faultTemplate) {
+      ctx.body = util.fail("", "请先在手机端设置故障模板");
+      return;
+    }
     let assetsSchema = await util.schemaProperty(assetsTemplate.content);
     let faultSchema = await util.guzhangSchemaProperty(faultTemplate.content);
     const db = mongoose.createConnection(config.URL);
