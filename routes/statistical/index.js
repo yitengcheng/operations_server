@@ -5,6 +5,7 @@ const totalCountForPc = require("./totalCountForPc");
 const totalAssetsForPc = require("./totalAssetsForPc");
 const totalFaultForPc = require("./totalFaultForPc");
 const totalFaultForPcByDate = require("./totalFaultForPcByDate");
+const totalAssetsByField = require("./totalAssetsByField");
 
 module.exports = {
   inspectionStatistical,
@@ -14,4 +15,5 @@ module.exports = {
   totalAssetsForPc,
   totalFaultForPc,
   totalFaultForPcByDate,
+  totalAssetsByField,
 };

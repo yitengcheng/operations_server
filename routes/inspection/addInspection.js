@@ -8,19 +8,27 @@ const log4j = require("../../utils/log4");
 
 router.post("/patrol/address/handle", async (ctx) => {
   try {
-    const { office, id, parentId = undefined } = ctx.request.body;
+    const { office, id, parentId = undefined, headUser = undefined } = ctx.request.body;
     const { user } = ctx.state;
     let res;
+    let principal;
+    if (headUser) {
+      principal = headUser;
+    } else {
+      const inspection = await InspectionAddress.findById(parentId);
+      principal = inspection.headUser;
+    }
     if (id) {
       res = await InspectionAddress.findByIdAndUpdate(
         id,
-        { $set: { office, parentId, companyId: user.companyId } },
+        { $set: { office, parentId, companyId: user.companyId, headUser: principal } },
         { upsert: true, new: true }
       );
     } else {
       res = new InspectionAddress({
         office,
         parentId,
+        headUser: principal,
         companyId: user.companyId,
       });
       res.save();

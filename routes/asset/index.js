@@ -4,6 +4,7 @@ const delAsset = require("./delAsset");
 const assetQrcode = require("./assetQrcode");
 const assetQrcodeForPC = require("./assetQrcodeForPC");
 const assetById = require("./assetById");
+const assetListByField = require("./assetListByField");
 
 module.exports = {
   putInStorage,
@@ -12,4 +13,5 @@ module.exports = {
   assetQrcode,
   assetQrcodeForPC,
   assetById,
+  assetListByField,
 };

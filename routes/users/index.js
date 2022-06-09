@@ -6,6 +6,7 @@ const updateStaff = require("./updateStaff");
 const updateUser = require("./updateUser");
 const modfiyPassword = require("./modfiyPassword");
 const dutyStaff = require("./dutyStaff");
+const reigist = require("./reigist");
 
 module.exports = {
   login,
@@ -16,4 +17,5 @@ module.exports = {
   updateUser,
   modfiyPassword,
   dutyStaff,
+  reigist,
 };
