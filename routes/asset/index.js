@@ -5,6 +5,7 @@ const assetQrcode = require("./assetQrcode");
 const assetQrcodeForPC = require("./assetQrcodeForPC");
 const assetById = require("./assetById");
 const assetListByField = require("./assetListByField");
+const downLoad = require("./downLoad");
 
 module.exports = {
   putInStorage,
@@ -14,4 +15,5 @@ module.exports = {
   assetQrcodeForPC,
   assetById,
   assetListByField,
+  downLoad,
 };
