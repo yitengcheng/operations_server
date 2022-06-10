@@ -12,5 +12,6 @@ module.exports = {
     /^\/api\/applet\/reportFault/,
     /^\/api\/downLoad/,
     /^\/api\/oss\/uploadLocal/,
+    /^\/api\/test\/updateTime/,
   ], // 接口白名单
 };
