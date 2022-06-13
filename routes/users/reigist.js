@@ -9,7 +9,7 @@ const log4j = require("../../utils/log4");
 const jwt = require("jsonwebtoken");
 const md5 = require("md5");
 
-router.post("/system/user/reigist", async (ctx) => {
+router.post("/user/reigist", async (ctx) => {
   try {
     ctx.body = util.success();
   } catch (error) {

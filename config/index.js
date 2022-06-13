@@ -13,5 +13,6 @@ module.exports = {
     /^\/api\/downLoad/,
     /^\/api\/oss\/uploadLocal/,
     /^\/api\/test\/updateTime/,
+    /^\/api\/user\/reigist/,
   ], // 接口白名单
 };
