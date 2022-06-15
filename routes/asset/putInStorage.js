@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 const config = require("../../config");
 
 router.post("/assets/insert", async (ctx) => {
+  const db = mongoose.createConnection(config.URL);
   try {
     const { data, templateId, id } = ctx.request.body;
     const companyTemplate = await CompanyTemplate.findById(templateId);
@@ -17,7 +18,6 @@ router.post("/assets/insert", async (ctx) => {
       return;
     }
     let schema = await util.schemaProperty(companyTemplate.content);
-    const db = mongoose.createConnection(config.URL);
     let assetsModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
     if (id) {
       const res = await assetsModule.findByIdAndUpdate(id, { $set: data }, { new: true });
@@ -33,6 +33,8 @@ router.post("/assets/insert", async (ctx) => {
     }
   } catch (error) {
     ctx.body = util.fail(error.stack);
+  } finally {
+    db.close();
   }
 });
 

@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 const config = require("../../config");
 
 router.post("/assets/list", async (ctx) => {
+  const db = mongoose.createConnection(config.URL);
   try {
     const { keyword } = ctx.request.body;
     const { page, skipIndex } = util.pager(ctx.request.body);
@@ -20,7 +21,6 @@ router.post("/assets/list", async (ctx) => {
     }
     let schema = await util.schemaProperty(companyTemplate.content);
     let select = await util.schemaSelect(companyTemplate.content);
-    const db = mongoose.createConnection(config.URL);
     let assetsModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
     const fuzzyQuery = util.fuzzyQuery(Object.keys(schema), keyword);
     const list = await assetsModule
@@ -31,6 +31,8 @@ router.post("/assets/list", async (ctx) => {
     ctx.body = util.success({ total, list });
   } catch (error) {
     ctx.body = util.fail(error.stack);
+  } finally {
+    db.close();
   }
 });
 

@@ -5,6 +5,7 @@ const delInspection = require("./delInspection");
 const addInspectionReport = require("./addInspectionReport");
 const inspectionReportList = require("./inspectionReportList");
 const completeInspection = require("./completeInspection");
+const downInspection = require("./downInspection");
 
 module.exports = {
   addInspection,
@@ -14,4 +15,5 @@ module.exports = {
   addInspectionReport,
   inspectionReportList,
   completeInspection,
+  downInspection,
 };

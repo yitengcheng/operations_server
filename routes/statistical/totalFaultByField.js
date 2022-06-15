@@ -1,5 +1,5 @@
 /**
- * 根据分类以及状态统计资产接口
+ * 根据分类以及状态统计故障接口
  */
 const router = require("koa-router")();
 const CompanyTemplate = require("../../models/companyTemplateSchema");
@@ -10,22 +10,21 @@ const config = require("../../config");
 const _ = require("lodash");
 const dayjs = require("dayjs");
 
-router.post("/statistical/count/assetsByField", async (ctx) => {
+router.post("/statistical/count/faultByField", async (ctx) => {
   const db = mongoose.createConnection(config.URL);
   try {
     const { user } = ctx.state;
     const { classification, status } = ctx.request.body;
-    const assetsTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: "1" });
-    let assetsSchema = await util.schemaProperty(assetsTemplate.content);
-
-    let assetsModule = db.model(assetsTemplate.moduleName, assetsSchema, assetsTemplate.moduleName);
-    const classifyRes = await assetsModule.aggregate().group({ _id: `$${classification}`, total: { $sum: 1 } });
+    const faultTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: "2" });
+    let faultSchema = await util.guzhangSchemaProperty(faultTemplate.content);
+    let faultModule = db.model(faultTemplate.moduleName, faultSchema, faultTemplate.moduleName);
+    const classifyRes = await faultModule.aggregate().group({ _id: `$${classification}`, total: { $sum: 1 } });
     const classifyList = _.map(classifyRes, "_id");
     let res = {};
     for (const [index, classify] of classifyList.entries()) {
       res[classify] = {
         total: classifyRes?.[index]?.total,
-        status: await assetsModule
+        status: await faultModule
           .aggregate()
           .match({ [classification]: classify })
           .group({ _id: `$${status}`, count: { $sum: 1 } }),

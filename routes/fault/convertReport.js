@@ -10,6 +10,7 @@ const config = require("../../config");
 const dayjs = require("dayjs");
 
 router.post("/fault/convert", async (ctx) => {
+  const db = mongoose.createConnection(config.URL);
   try {
     const { receiveUser, id, remark } = ctx.request.body;
     const { user } = ctx.state;
@@ -19,7 +20,6 @@ router.post("/fault/convert", async (ctx) => {
       return;
     }
     let schema = await util.guzhangSchemaProperty(companyTemplate.content);
-    const db = mongoose.createConnection(config.URL);
     let faultModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
     const fault = await faultModule.findById(id);
     const res = await faultModule.updateOne(
@@ -33,6 +33,8 @@ router.post("/fault/convert", async (ctx) => {
     }
   } catch (error) {
     ctx.body = util.fail(error.stack);
+  } finally {
+    db.close();
   }
 });
 

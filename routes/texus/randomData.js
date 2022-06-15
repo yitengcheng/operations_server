@@ -15,6 +15,7 @@ const mongoose = require("mongoose");
 const config = require("../../config");
 
 router.post("/test/randomData", async (ctx) => {
+  const db = mongoose.createConnection(config.URL);
   try {
     const { user } = ctx.state;
     const inspectionAddress = await InspectionAddress.find({ parentId: null });
@@ -23,7 +24,7 @@ router.post("/test/randomData", async (ctx) => {
     const guzhangTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: "2" });
     let schema = await util.schemaProperty(assetsTemplate.content);
     let guzhangSchema = await util.guzhangSchemaProperty(guzhangTemplate.content);
-    const db = mongoose.createConnection(config.URL);
+
     let assetsModule = db.model(assetsTemplate.moduleName, schema, assetsTemplate.moduleName);
     let guzhangModule = db.model(guzhangTemplate.moduleName, guzhangSchema, guzhangTemplate.moduleName);
 
@@ -52,6 +53,8 @@ router.post("/test/randomData", async (ctx) => {
     ctx.body = util.success({}, "生成成功");
   } catch (error) {
     ctx.body = util.fail(error.stack);
+  } finally {
+    db.close();
   }
 });
 

@@ -7,25 +7,48 @@ const util = require("../../utils/util");
 const log4j = require("../../utils/log4");
 const mongoose = require("mongoose");
 const config = require("../../config");
+const dayjs = require("dayjs");
+const quarterOfYear = require("dayjs/plugin/quarterOfYear");
+dayjs.extend(quarterOfYear);
 
 router.post("/report/app/fault", async (ctx) => {
+  const db = mongoose.createConnection(config.URL);
   try {
     const { user } = ctx.state;
+    const { type } = ctx.request.body; // type 1 本月 2 本季度 3 本年
     const companyTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: "2" });
     if (!companyTemplate) {
       ctx.body = util.fail("", "请先设置公司故障模板");
       return;
     }
+    let createTimeParams = {};
+    if (type === 1) {
+      createTimeParams = {
+        $gte: dayjs(dayjs().startOf("month")).toDate(),
+        $lte: dayjs(dayjs().endOf("month")).toDate(),
+      };
+    } else if (type === 2) {
+      createTimeParams = {
+        $gte: dayjs(dayjs().startOf("quarter")).toDate(),
+        $lte: dayjs(dayjs().endOf("quarter")).toDate(),
+      };
+    } else if (type === 3) {
+      createTimeParams = {
+        $gte: dayjs(dayjs().startOf("year")).toDate(),
+        $lte: dayjs(dayjs().endOf("year")).toDate(),
+      };
+    }
     let schema = await util.guzhangSchemaProperty(companyTemplate.content);
-    const db = mongoose.createConnection(config.URL);
     let faultModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
-    const faultTotal = await faultModule.countDocuments();
-    const faultCompleteTotal = await faultModule.countDocuments({ status: 2 });
-    const faultPendingTotal = await faultModule.countDocuments({ status: 1 });
-    const faultRefuseTotal = await faultModule.countDocuments({ status: 3 });
+    const faultTotal = await faultModule.countDocuments({ createTime: createTimeParams });
+    const faultCompleteTotal = await faultModule.countDocuments({ status: 2, createTime: createTimeParams });
+    const faultPendingTotal = await faultModule.countDocuments({ status: 1, createTime: createTimeParams });
+    const faultRefuseTotal = await faultModule.countDocuments({ status: 3, createTime: createTimeParams });
     ctx.body = util.success({ faultTotal, faultCompleteTotal, faultPendingTotal, faultRefuseTotal });
   } catch (error) {
     ctx.body = util.fail(error.stack);
+  } finally {
+    db.close();
   }
 });
 

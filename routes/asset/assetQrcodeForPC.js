@@ -17,6 +17,7 @@ const _ = require("lodash");
 const archiver = require("archiver");
 
 router.post("/assets/downQr", async (ctx) => {
+  const db = mongoose.createConnection(config.URL);
   try {
     const { showKey, classify } = ctx.request.body;
     const { user } = ctx.state;
@@ -27,7 +28,6 @@ router.post("/assets/downQr", async (ctx) => {
       return;
     }
     let schema = await util.schemaProperty(companyTemplate.content);
-    const db = mongoose.createConnection(config.URL);
     let assetsModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
     const assets = await assetsModule.find();
     assets.map(async (asset) => {
@@ -84,6 +84,8 @@ router.post("/assets/downQr", async (ctx) => {
     ctx.body = util.success({ url: `zip/${company.companyName}.zip` });
   } catch (error) {
     ctx.body = util.fail(error.stack);
+  } finally {
+    db.close();
   }
 });
 

@@ -14,6 +14,7 @@ const dayjs = require("dayjs");
 const sendSMS = require("../../utils/sms");
 
 router.post("/applet/reportFault", async (ctx) => {
+  const db = mongoose.createConnection(config.URL);
   try {
     const { data, templateId, assetsId, code } = ctx.request.body;
     const { user } = ctx.state;
@@ -23,7 +24,6 @@ router.post("/applet/reportFault", async (ctx) => {
       return;
     }
     let schema = await util.guzhangSchemaProperty(companyTemplate.content);
-    const db = mongoose.createConnection(config.URL);
     let faultModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
     const phoneNumber = await util.getAppletPhonenumber(code);
     const scheduling = await Scheduling.findOne({
@@ -63,6 +63,8 @@ router.post("/applet/reportFault", async (ctx) => {
     ctx.body = util.success({}, "上报成功");
   } catch (error) {
     ctx.body = util.fail(error.stack);
+  } finally {
+    db.close();
   }
 });
 

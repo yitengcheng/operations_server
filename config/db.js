@@ -2,9 +2,9 @@
  * 数据库连接
  */
 
-const mongoose = require('mongoose');
-const config = require('./index');
-const log4j = require('../utils/log4')
+const mongoose = require("mongoose");
+const config = require("./index");
+const log4j = require("../utils/log4");
 
 async function main() {
   await mongoose.connect(config.URL);

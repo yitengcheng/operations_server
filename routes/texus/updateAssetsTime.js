@@ -1,18 +1,17 @@
 /**
- * 故障处理完成接口
+ * 修正巡检报告时间接口
  */
 const router = require("koa-router")();
 const CompanyTemplate = require("../../models/companyTemplateSchema");
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
 const mongoose = require("mongoose");
-const config = require("../../config");
+const util = require("../../utils/util");
+const _ = require("lodash");
 const dayjs = require("dayjs");
+const config = require("../../config");
 
-router.post("/fault/conclusion", async (ctx) => {
+router.post("/test/updateAssetsTime", async (ctx) => {
   const db = mongoose.createConnection(config.URL);
   try {
-    const { id, conclusion, conclusionPhoto } = ctx.request.body;
     const { user } = ctx.state;
     const companyTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: "2" });
     if (!companyTemplate) {
@@ -20,18 +19,16 @@ router.post("/fault/conclusion", async (ctx) => {
       return;
     }
     let schema = await util.guzhangSchemaProperty(companyTemplate.content);
+
     let faultModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
-    const res = await faultModule.updateOne(
-      { _id: id },
-      {
-        $set: { conclusion, conclusionPhoto, status: 2 },
-      }
-    );
-    if (res.modifiedCount > 0) {
-      ctx.body = util.success({}, "处理成功");
-    } else {
-      ctx.body = util.fail("", "处理失败");
+    const faults = await faultModule.find();
+    for (const fault of faults) {
+      await faultModule.updateOne(
+        { _id: fault._id },
+        { createTime: dayjs(fault.createTime).toDate(), designateTime: dayjs(fault.designateTime).toDate() }
+      );
     }
+    ctx.body = util.success({}, "修改成功");
   } catch (error) {
     ctx.body = util.fail(error.stack);
   } finally {

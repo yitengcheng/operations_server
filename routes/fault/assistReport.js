@@ -10,6 +10,7 @@ const config = require("../../config");
 const dayjs = require("dayjs");
 
 router.post("/fault/assist", async (ctx) => {
+  const db = mongoose.createConnection(config.URL);
   try {
     const { assistId, id } = ctx.request.body;
     const { user } = ctx.state;
@@ -19,7 +20,6 @@ router.post("/fault/assist", async (ctx) => {
       return;
     }
     let schema = await util.guzhangSchemaProperty(companyTemplate.content);
-    const db = mongoose.createConnection(config.URL);
     let faultModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
     const res = await faultModule.updateOne({ _id: id }, { $set: { assistUser: assistId } });
     if (res.modifiedCount > 0) {
@@ -29,6 +29,8 @@ router.post("/fault/assist", async (ctx) => {
     }
   } catch (error) {
     ctx.body = util.fail(error.stack);
+  } finally {
+    db.close();
   }
 });
 

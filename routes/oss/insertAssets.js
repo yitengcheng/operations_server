@@ -28,6 +28,7 @@ router.post(
     },
   }),
   async (ctx) => {
+    const db = mongoose.createConnection(config.URL);
     try {
       const file = ctx.request.files.file;
       const { user } = ctx.state;
@@ -37,7 +38,7 @@ router.post(
         return;
       }
       let schema = await util.schemaProperty(companyTemplate.content);
-      const db = mongoose.createConnection(config.URL);
+
       let assetsModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
       const workbook = xlsx.readFile(file.path);
       const data = xlsx.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
@@ -46,6 +47,8 @@ router.post(
       ctx.body = util.success({}, `成功插入${res.length}条`);
     } catch (error) {
       ctx.body = util.fail(error.stack);
+    } finally {
+      db.close();
     }
   }
 );

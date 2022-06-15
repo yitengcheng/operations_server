@@ -12,6 +12,7 @@ const dayjs = require("dayjs");
 const { CODE } = require("../../utils/util");
 
 router.post("/fault/detail", async (ctx) => {
+  const db = mongoose.createConnection(config.URL);
   try {
     const { faultId } = ctx.request.body;
     const { user } = ctx.state;
@@ -32,7 +33,6 @@ router.post("/fault/detail", async (ctx) => {
     let guzhangSchema = await util.guzhangSchemaProperty(faultTemplate.content);
     let assetSchema = await util.schemaProperty(assetTemplate.content);
     let assetSelect = await util.schemaSelect(assetTemplate.content);
-    const db = mongoose.createConnection(config.URL);
     let faultModule = db.model(faultTemplate.moduleName, guzhangSchema, faultTemplate.moduleName);
     let assetModule = db.model(assetTemplate.moduleName, assetSchema, assetTemplate.moduleName);
     const fault = await faultModule.findById(faultId);
@@ -41,6 +41,8 @@ router.post("/fault/detail", async (ctx) => {
     ctx.body = util.success({ fault, asset, dispose });
   } catch (error) {
     ctx.body = util.fail(error.stack);
+  } finally {
+    db.close();
   }
 });
 

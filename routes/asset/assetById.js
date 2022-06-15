@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 const config = require("../../config");
 
 router.post("/assets/detailById", async (ctx) => {
+  const db = mongoose.createConnection(config.URL);
   try {
     const { id } = ctx.request.body;
     const { user } = ctx.state;
@@ -19,12 +20,13 @@ router.post("/assets/detailById", async (ctx) => {
     }
     let schema = await util.schemaProperty(companyTemplate.content);
     let select = await util.schemaSelect(companyTemplate.content);
-    const db = mongoose.createConnection(config.URL);
     let assetsModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
     const res = await assetsModule.findById(new mongoose.Types.ObjectId(id), select);
     ctx.body = util.success(res);
   } catch (error) {
     ctx.body = util.fail(error.stack);
+  } finally {
+    db.close();
   }
 });
 

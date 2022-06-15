@@ -10,6 +10,7 @@ const config = require("../../config");
 const dayjs = require("dayjs");
 
 router.post("/fault/myreport", async (ctx) => {
+  const db = mongoose.createConnection(config.URL);
   try {
     const { user } = ctx.state;
     const companyTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: "2" });
@@ -18,7 +19,6 @@ router.post("/fault/myreport", async (ctx) => {
       return;
     }
     let schema = await util.guzhangSchemaProperty(companyTemplate.content);
-    const db = mongoose.createConnection(config.URL);
     let faultModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
     const cc = await faultModule.countDocuments({ cc: user._id, status: 1 });
     const assist = await faultModule.countDocuments({ assistUser: user._id, status: 1 });
@@ -27,6 +27,8 @@ router.post("/fault/myreport", async (ctx) => {
     ctx.body = util.success({ cc, create, handle, assist });
   } catch (error) {
     ctx.body = util.fail(error.stack);
+  } finally {
+    db.close();
   }
 });
 
