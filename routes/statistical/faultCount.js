@@ -24,26 +24,29 @@ router.post("/report/app/fault", async (ctx) => {
     let createTimeParams = {};
     if (type === 1) {
       createTimeParams = {
-        $gte: dayjs(dayjs().startOf("month")).toDate(),
-        $lte: dayjs(dayjs().endOf("month")).toDate(),
+        createTime: { $gte: dayjs(dayjs().startOf("month")).toDate(), $lte: dayjs(dayjs().endOf("month")).toDate() },
       };
     } else if (type === 2) {
       createTimeParams = {
-        $gte: dayjs(dayjs().startOf("quarter")).toDate(),
-        $lte: dayjs(dayjs().endOf("quarter")).toDate(),
+        createTime: {
+          $gte: dayjs(dayjs().startOf("quarter")).toDate(),
+          $lte: dayjs(dayjs().endOf("quarter")).toDate(),
+        },
       };
     } else if (type === 3) {
       createTimeParams = {
-        $gte: dayjs(dayjs().startOf("year")).toDate(),
-        $lte: dayjs(dayjs().endOf("year")).toDate(),
+        createTime: {
+          $gte: dayjs(dayjs().startOf("year")).toDate(),
+          $lte: dayjs(dayjs().endOf("year")).toDate(),
+        },
       };
     }
     let schema = await util.guzhangSchemaProperty(companyTemplate.content);
     let faultModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
-    const faultTotal = await faultModule.countDocuments({ createTime: createTimeParams });
-    const faultCompleteTotal = await faultModule.countDocuments({ status: 2, createTime: createTimeParams });
-    const faultPendingTotal = await faultModule.countDocuments({ status: 1, createTime: createTimeParams });
-    const faultRefuseTotal = await faultModule.countDocuments({ status: 3, createTime: createTimeParams });
+    const faultTotal = await faultModule.countDocuments(createTimeParams);
+    const faultCompleteTotal = await faultModule.countDocuments({ status: 2, ...createTimeParams });
+    const faultPendingTotal = await faultModule.countDocuments({ status: 1, ...createTimeParams });
+    const faultRefuseTotal = await faultModule.countDocuments({ status: 3, ...createTimeParams });
     ctx.body = util.success({ faultTotal, faultCompleteTotal, faultPendingTotal, faultRefuseTotal });
   } catch (error) {
     ctx.body = util.fail(error.stack);
