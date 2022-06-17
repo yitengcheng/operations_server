@@ -50,7 +50,7 @@ router.post("/applet/reportFault", async (ctx) => {
     if (staff?.phonenumber) {
       sendSMS(staff?.phonenumber);
     }
-    const res = new faultModule({
+    const res = await faultModule.create({
       ...data,
       assetsId,
       dispose: new mongoose.Types.ObjectId(staff._id),
@@ -58,8 +58,7 @@ router.post("/applet/reportFault", async (ctx) => {
       createTime: Date.now(),
       designateTime: Date.now(),
       phoneNumber,
-    });
-    res.save();
+    })
     ctx.body = util.success({}, "上报成功");
   } catch (error) {
     ctx.body = util.fail(error.stack);

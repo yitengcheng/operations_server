@@ -21,17 +21,17 @@ router.post("/fault/create", async (ctx) => {
     }
     let schema = await util.guzhangSchemaProperty(companyTemplate.content);
     let faultModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
-    const res = new faultModule({
+    
+    const res = await faultModule.create({
       ...data,
-      reportUser: new mongoose.Types.ObjectId(user._id),
+      reportUser: user._id,
       assetsId,
-      dispose: new mongoose.Types.ObjectId(user._id),
+      dispose: user._id,
       status: 1,
       createTime: Date.now(),
       designateTime: Date.now(),
       phoneNumber: user.phonenumber,
-    });
-    res.save();
+    })
     ctx.body = util.success({}, "上报成功");
   } catch (error) {
     ctx.body = util.fail(error.stack);

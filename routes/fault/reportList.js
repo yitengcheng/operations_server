@@ -26,7 +26,7 @@ router.post("/fault/list", async (ctx) => {
     let params;
     if (type == 1) {
       // 由我创建的工单
-      params = { reportUser: new mongoose.Types.ObjectId(user._id), ...fuzzyQuery };
+      params = { reportUser: new mongoose.Types.ObjectId(user._id), status: 1,  ...fuzzyQuery };
     } else if (type == 2) {
       // 待我处理
       params = { dispose: new mongoose.Types.ObjectId(user._id), status: 1, ...fuzzyQuery };
