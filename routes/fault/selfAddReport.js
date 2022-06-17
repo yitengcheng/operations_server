@@ -28,8 +28,8 @@ router.post("/fault/create", async (ctx) => {
       assetsId,
       dispose: user._id,
       status: 1,
-      createTime: dayjs().format("YYYY-MM-DD"),
-      designateTime: dayjs().format("YYYY-MM-DD"),
+      createTime: Date.now(),
+      designateTime: Date.now(),
       phoneNumber: user.phonenumber,
     });
     res.save();

@@ -55,8 +55,8 @@ router.post("/applet/reportFault", async (ctx) => {
       assetsId,
       dispose: staff._id,
       status: 1,
-      createTime: dayjs().format("YYYY-MM-DD"),
-      designateTime: dayjs().format("YYYY-MM-DD"),
+      createTime: Date.now(),
+      designateTime: Date.now(),
       phoneNumber,
     });
     res.save();
