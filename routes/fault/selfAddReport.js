@@ -8,7 +8,6 @@ const log4j = require("../../utils/log4");
 const mongoose = require("mongoose");
 const config = require("../../config");
 const dayjs = require("dayjs");
-const { db } = require("../../models/companyTemplateSchema");
 
 router.post("/fault/create", async (ctx) => {
   const db = mongoose.createConnection(config.URL);
