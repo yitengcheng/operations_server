@@ -24,9 +24,9 @@ router.post("/fault/create", async (ctx) => {
     let faultModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
     const res = new faultModule({
       ...data,
-      reportUser: user._id,
+      reportUser: new mongoose.Types.ObjectId(user._id),
       assetsId,
-      dispose: user._id,
+      dispose: new mongoose.Types.ObjectId(user._id),
       status: 1,
       createTime: Date.now(),
       designateTime: Date.now(),

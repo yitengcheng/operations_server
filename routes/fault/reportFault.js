@@ -33,7 +33,7 @@ router.post("/applet/reportFault", async (ctx) => {
     let staff;
     let staffCount = 0;
     scheduling?.staffIds?.forEach(async (staff, index) => {
-      const count = await faultModule.countDocuments({ createTime: dayjs().format("YYYY-MM-DD"), dispose: staff });
+      const count = await faultModule.countDocuments({ createTime: { $lte: dayjs().toDate() }, dispose: staff });
       if (index === 0) {
         staffCount = count;
         staff = await User.findById(staff);
@@ -53,7 +53,7 @@ router.post("/applet/reportFault", async (ctx) => {
     const res = new faultModule({
       ...data,
       assetsId,
-      dispose: staff._id,
+      dispose: new mongoose.Types.ObjectId(staff._id),
       status: 1,
       createTime: Date.now(),
       designateTime: Date.now(),
