@@ -1,20 +1,19 @@
 /**
  * 根据字段分类故障统计接口
  */
-const router = require("koa-router")();
-const CompanyTemplate = require("../../models/companyTemplateSchema");
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
-const mongoose = require("mongoose");
-const config = require("../../config");
-const _ = require("lodash");
+const router = require('koa-router')();
+const CompanyTemplate = require('../../models/companyTemplateSchema');
+const util = require('../../utils/util');
+const mongoose = require('mongoose');
+const config = require('../../config');
+const _ = require('lodash');
 
-router.post("/statistical/total/faultByField", async (ctx) => {
+router.post('/statistical/total/faultByField', async (ctx) => {
   const db = mongoose.createConnection(config.URL);
   try {
     const { user } = ctx.state;
     const { params } = ctx.request.body;
-    const faultTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: "2" });
+    const faultTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: '2' });
     let faultSchema = await util.schemaProperty(faultTemplate.content);
 
     let faultModule = db.model(faultTemplate.moduleName, faultSchema, faultTemplate.moduleName);

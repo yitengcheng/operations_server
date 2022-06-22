@@ -1,21 +1,19 @@
 /**
  * 资产总数接口
  */
-const router = require("koa-router")();
-const CompanyTemplate = require("../../models/companyTemplateSchema");
-const InspectionReport = require("../../models/inspectionReportSchema");
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
-const mongoose = require("mongoose");
-const config = require("../../config");
+const router = require('koa-router')();
+const CompanyTemplate = require('../../models/companyTemplateSchema');
+const util = require('../../utils/util');
+const mongoose = require('mongoose');
+const config = require('../../config');
 
-router.post("/statistical/totalAssetsCount", async (ctx) => {
+router.post('/statistical/totalAssetsCount', async (ctx) => {
   const db = mongoose.createConnection(config.URL);
   try {
     const { user } = ctx.state;
-    const assetsTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: "1" });
+    const assetsTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: '1' });
     if (!assetsTemplate) {
-      ctx.body = util.fail("", "请先在手机端设置资产模板");
+      ctx.body = util.fail('', '请先在手机端设置资产模板');
       return;
     }
     let assetsSchema = await util.schemaProperty(assetsTemplate.content);

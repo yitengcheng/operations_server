@@ -1,20 +1,19 @@
 /**
  * 上传文件
  */
-const router = require("koa-router")();
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
-const koaBody = require("koa-body");
-const path = require("path");
-const qiniu = require("qiniu");
-const fs = require("fs");
+const router = require('koa-router')();
+const util = require('../../utils/util');
+const koaBody = require('koa-body');
+const path = require('path');
+const qiniu = require('qiniu');
+const fs = require('fs');
 
 const fileUpload = (file) => {
   return new Promise((resolve, reject) => {
-    let accessKey = "AdYOTLCiyOcuiD4Iv5-heua4OWG-EOKaCvObb4SO";
-    let secretKey = "g9tQu5UiGnGr6o8p9lAyViKGgNLvwhhfo0rxwbB9";
+    let accessKey = 'AdYOTLCiyOcuiD4Iv5-heua4OWG-EOKaCvObb4SO';
+    let secretKey = 'g9tQu5UiGnGr6o8p9lAyViKGgNLvwhhfo0rxwbB9';
     let mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
-    let putPolicy = new qiniu.rs.PutPolicy({ scope: "cdxsnew1" });
+    let putPolicy = new qiniu.rs.PutPolicy({ scope: 'cdxsnew1' });
     let uploadToken = putPolicy.uploadToken(mac);
     let config = new qiniu.conf.Config();
     // 空间对应的机房
@@ -35,13 +34,13 @@ const fileUpload = (file) => {
 };
 
 router.post(
-  "/oss/upload",
+  '/oss/upload',
   koaBody({
     // 支持文件格式
     multipart: true,
     formidable: {
       // 上传目录
-      uploadDir: path.join(__dirname, "../../public/upload"),
+      uploadDir: path.join(__dirname, '../../public/upload'),
       // 保留文件扩展名
       keepExtensions: true,
       maxFileSize: 52428800,
@@ -49,14 +48,14 @@ router.post(
   }),
   async (ctx) => {
     try {
-      const file = ctx.request.files.file;
+      const { file } = ctx.request.files;
       const url = await fileUpload(file);
       fs.unlinkSync(file.path);
       ctx.body = util.success({ url });
     } catch (error) {
       ctx.body = util.fail(error.stack);
     }
-  }
+  },
 );
 
 module.exports = router;

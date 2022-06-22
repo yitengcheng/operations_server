@@ -1,12 +1,11 @@
 /**
  * 巡检地点列表接口(不分页)
  */
-const router = require("koa-router")();
-const InspectionAddress = require("../../models/inspectionAddressSchema");
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
+const router = require('koa-router')();
+const InspectionAddress = require('../../models/inspectionAddressSchema');
+const util = require('../../utils/util');
 
-router.post("/patrol/address/page", async (ctx) => {
+router.post('/patrol/address/page', async (ctx) => {
   try {
     const { parentId = undefined } = ctx.request.body;
     const { user } = ctx.state;

@@ -1,15 +1,13 @@
 /**
  * 删除巡检地点接口
  */
-const router = require("koa-router")();
-const InspectionAddress = require("../../models/inspectionAddressSchema");
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
+const router = require('koa-router')();
+const InspectionAddress = require('../../models/inspectionAddressSchema');
+const util = require('../../utils/util');
 
-router.post("/patrol/address/delete", async (ctx) => {
+router.post('/patrol/address/delete', async (ctx) => {
   try {
     const { id } = ctx.request.body;
-    const { user } = ctx.state;
     const inspection = await InspectionAddress.remove({ _id: id });
     const inspectionChild = await InspectionAddress.remove({ parentId: id });
     let flag = false;
@@ -20,9 +18,9 @@ router.post("/patrol/address/delete", async (ctx) => {
       flag = true;
     }
     if (flag) {
-      ctx.body = util.success({}, "删除成功");
+      ctx.body = util.success({}, '删除成功');
     } else {
-      ctx.body = util.fail("", "删除失败");
+      ctx.body = util.fail('', '删除失败');
     }
   } catch (error) {
     ctx.body = util.fail(error.stack);

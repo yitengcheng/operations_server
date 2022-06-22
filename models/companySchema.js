@@ -1,7 +1,7 @@
 /**
  * 公司实体
  */
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const schema = mongoose.Schema({
   companyName: String, // 公司名
@@ -10,4 +10,4 @@ const schema = mongoose.Schema({
   SMSPlatformId: String, // 短信平台抬头ID
 });
 
-module.exports = mongoose.model("companys", schema, "companys"); // 模型名 schema 数据库集合名
+module.exports = mongoose.model('companys', schema, 'companys'); // 模型名 schema 数据库集合名

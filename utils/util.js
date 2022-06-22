@@ -1,21 +1,21 @@
 /**
  * 通用工具函数
  */
-const log4js = require("./log4");
-const axios = require("axios");
-const mock = require("mockjs");
-const _ = require("lodash");
-const dayjs = require("dayjs");
+const log4js = require('./log4');
+const axios = require('axios');
+const mock = require('mockjs');
+const _ = require('lodash');
+const dayjs = require('dayjs');
 
 const CODE = {
   SUCCESS: 200,
-  PARAM_ERROR: 101, //参数错误
+  PARAM_ERROR: 101, // 参数错误
   USER_ACCOUNT_ERROR: 201, // 账号或密码错误
   USER_LOGIN_ERROR: 301, // 用户未登录
   BUSINESS_ERROR: 501, // 业务请求失败
   AUTH_ERROR: 401, // 认证失败或TOKEN过期
 };
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 module.exports = {
   /**
@@ -36,7 +36,7 @@ module.exports = {
       skipIndex,
     };
   },
-  success(data = "", msg = "", code = CODE.SUCCESS) {
+  success(data = '', msg = '', code = CODE.SUCCESS) {
     log4js.debug(data);
     return {
       code,
@@ -44,7 +44,7 @@ module.exports = {
       data,
     };
   },
-  fail(stack, msg = "访问失败，请联系开发商", code = CODE.BUSINESS_ERROR) {
+  fail(stack, msg = '访问失败，请联系开发商', code = CODE.BUSINESS_ERROR) {
     log4js.debug(stack);
     return {
       code,
@@ -52,7 +52,7 @@ module.exports = {
     };
   },
   fuzzyQuery(fields, keyword) {
-    const reg = new RegExp(keyword, "i");
+    const reg = new RegExp(keyword, 'i');
     let query = [];
     fields.forEach((element) => {
       query.push({ [element]: { $regex: reg } });
@@ -65,31 +65,31 @@ module.exports = {
     return new Promise((resolve) => {
       for (const item in property) {
         switch (property[item].type) {
-          case "文字输入框":
+          case '文字输入框':
             res[property[item].label] = String;
             break;
-          case "数字输入框":
+          case '数字输入框':
             res[property[item].label] = Number;
             break;
-          case "多行文字输入框":
+          case '多行文字输入框':
             res[property[item].label] = String;
             break;
-          case "选择器":
+          case '选择器':
             res[property[item].label] = String;
             break;
-          case "单选框":
+          case '单选框':
             res[property[item].label] = String;
             break;
-          case "多选框":
+          case '多选框':
             res[property[item].label] = [String];
             break;
-          case "图片选择":
+          case '图片选择':
             res[property[item].label] = [String];
             break;
-          case "日期选择":
+          case '日期选择':
             res[property[item].label] = String;
             break;
-          case "日期范围选择":
+          case '日期范围选择':
             res[property[item].label] = [String];
             break;
           default:
@@ -121,31 +121,31 @@ module.exports = {
     return new Promise((resolve) => {
       for (const item in property) {
         switch (property[item].type) {
-          case "文字输入框":
+          case '文字输入框':
             res[property[item].label] = String;
             break;
-          case "数字输入框":
+          case '数字输入框':
             res[property[item].label] = Number;
             break;
-          case "多行文字输入框":
+          case '多行文字输入框':
             res[property[item].label] = String;
             break;
-          case "选择器":
+          case '选择器':
             res[property[item].label] = String;
             break;
-          case "单选框":
+          case '单选框':
             res[property[item].label] = String;
             break;
-          case "多选框":
+          case '多选框':
             res[property[item].label] = [String];
             break;
-          case "图片选择":
+          case '图片选择':
             res[property[item].label] = [String];
             break;
-          case "日期选择":
+          case '日期选择':
             res[property[item].label] = String;
             break;
-          case "日期范围选择":
+          case '日期范围选择':
             res[property[item].label] = [String];
             break;
           default:
@@ -175,31 +175,31 @@ module.exports = {
     let res = {};
     for (const item in property) {
       switch (property[item].type) {
-        case "文字输入框":
+        case '文字输入框':
           res[property[item].label] = mock.Random.cword();
           break;
-        case "数字输入框":
+        case '数字输入框':
           res[property[item].label] = mock.Random.natural();
           break;
-        case "多行文字输入框":
+        case '多行文字输入框':
           res[property[item].label] = mock.Random.csentence();
           break;
-        case "选择器":
+        case '选择器':
           res[property[item].label] = mock.Random.cword();
           break;
-        case "单选框":
+        case '单选框':
           res[property[item].label] = mock.Random.cword();
           break;
-        case "多选框":
+        case '多选框':
           res[property[item].label] = [mock.Random.cword(), mock.Random.cword()];
           break;
-        case "图片选择":
+        case '图片选择':
           res[property[item].label] = undefined;
           break;
-        case "日期选择":
+        case '日期选择':
           res[property[item].label] = mock.Random.date();
           break;
-        case "日期范围选择":
+        case '日期范围选择':
           res[property[item].label] = [mock.Random.date(), mock.Random.date()];
           break;
         default:
@@ -213,31 +213,31 @@ module.exports = {
     let res = {};
     for (const item in property) {
       switch (property[item].type) {
-        case "文字输入框":
+        case '文字输入框':
           res[property[item].label] = mock.Random.cword();
           break;
-        case "数字输入框":
+        case '数字输入框':
           res[property[item].label] = mock.Random.natural();
           break;
-        case "多行文字输入框":
+        case '多行文字输入框':
           res[property[item].label] = mock.Random.csentence();
           break;
-        case "选择器":
+        case '选择器':
           res[property[item].label] = mock.Random.cword();
           break;
-        case "单选框":
+        case '单选框':
           res[property[item].label] = mock.Random.cword();
           break;
-        case "多选框":
+        case '多选框':
           res[property[item].label] = [mock.Random.cword(), mock.Random.cword()];
           break;
-        case "图片选择":
+        case '图片选择':
           res[property[item].label] = undefined;
           break;
-        case "日期选择":
+        case '日期选择':
           res[property[item].label] = mock.Random.date();
           break;
-        case "日期范围选择":
+        case '日期范围选择':
           res[property[item].label] = [mock.Random.date(), mock.Random.date()];
           break;
         default:
@@ -249,9 +249,9 @@ module.exports = {
       assetsId,
       status: _.random(1, 3),
       dispose: reportUser,
-      createTime: `2022-${dayjs().add(1, "month").month()}-${_.random(1, 30)}`,
-      designateTime: `2022-${dayjs().add(1, "month").month()}-${_.random(1, 30)}`,
-      phoneNumber: "13984842424",
+      createTime: `2022-${dayjs().add(1, 'month').month()}-${_.random(1, 30)}`,
+      designateTime: `2022-${dayjs().add(1, 'month').month()}-${_.random(1, 30)}`,
+      phoneNumber: '13984842424',
       remark: mock.Random.csentence(),
       conclusion: mock.Random.csentence(),
       ...res,
@@ -263,31 +263,31 @@ module.exports = {
     return new Promise((resolve) => {
       for (const item in property) {
         switch (property[item].type) {
-          case "文字输入框":
+          case '文字输入框':
             res[property[item].label] = 1;
             break;
-          case "数字输入框":
+          case '数字输入框':
             res[property[item].label] = 1;
             break;
-          case "多行文字输入框":
+          case '多行文字输入框':
             res[property[item].label] = 1;
             break;
-          case "选择器":
+          case '选择器':
             res[property[item].label] = 1;
             break;
-          case "单选框":
+          case '单选框':
             res[property[item].label] = 1;
             break;
-          case "多选框":
+          case '多选框':
             res[property[item].label] = 1;
             break;
-          case "图片选择":
+          case '图片选择':
             res[property[item].label] = 1;
             break;
-          case "日期选择":
+          case '日期选择':
             res[property[item].label] = 1;
             break;
-          case "日期范围选择":
+          case '日期范围选择':
             res[property[item].label] = 1;
             break;
           default:
@@ -298,7 +298,7 @@ module.exports = {
     });
   },
   async getAppletPhonenumber(code) {
-    const getTokenUrl = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxf40490ad0fe3246b&secret=fb186bd9419d53e191f9997b5af4190a`;
+    const getTokenUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxf40490ad0fe3246b&secret=fb186bd9419d53e191f9997b5af4190a';
     const response = await axios.get(getTokenUrl);
     const { access_token } = response.data;
     const getPhonenumberUrl = `https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token=${access_token}`;
@@ -306,7 +306,7 @@ module.exports = {
       code,
     };
     const resPhone = await axios.post(getPhonenumberUrl, getPhonenumberOption);
-    return resPhone.data?.phone_info?.phoneNumber ?? "";
+    return resPhone.data?.phone_info?.phoneNumber ?? '';
   },
   CODE,
 };

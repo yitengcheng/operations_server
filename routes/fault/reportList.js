@@ -1,23 +1,22 @@
 /**
  * 故障列表接口
  */
-const router = require("koa-router")();
-const CompanyTemplate = require("../../models/companyTemplateSchema");
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
-const mongoose = require("mongoose");
-const config = require("../../config");
+const router = require('koa-router')();
+const CompanyTemplate = require('../../models/companyTemplateSchema');
+const util = require('../../utils/util');
+const mongoose = require('mongoose');
+const config = require('../../config');
 
-router.post("/fault/list", async (ctx) => {
+router.post('/fault/list', async (ctx) => {
   const db = mongoose.createConnection(config.URL);
   try {
     const { type, keyword } = ctx.request.body; // 1 由我创建的工单 2 待我处理 3 抄送我的 4 已处理工单 5 工单总列表 6 待处理总列表 7 已处理完成总列表 8 分享给我的
     const { page, skipIndex } = util.pager(ctx.request.body);
     const { user } = ctx.state;
 
-    const companyTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: "2" });
+    const companyTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: '2' });
     if (!companyTemplate) {
-      ctx.body = util.fail("", "请先设置公司故障模板");
+      ctx.body = util.fail('', '请先设置公司故障模板');
       return;
     }
     let schema = await util.guzhangSchemaProperty(companyTemplate.content);
@@ -26,7 +25,7 @@ router.post("/fault/list", async (ctx) => {
     let params;
     if (type == 1) {
       // 由我创建的工单
-      params = { reportUser: new mongoose.Types.ObjectId(user._id), status: 1,  ...fuzzyQuery };
+      params = { reportUser: new mongoose.Types.ObjectId(user._id), status: 1, ...fuzzyQuery };
     } else if (type == 2) {
       // 待我处理
       params = { dispose: new mongoose.Types.ObjectId(user._id), status: 1, ...fuzzyQuery };

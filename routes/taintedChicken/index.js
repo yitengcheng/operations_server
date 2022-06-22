@@ -1,4 +1,4 @@
-const getOneTainted = require("./getOneTainted");
+const getOneTainted = require('./getOneTainted');
 
 module.exports = {
   getOneTainted,

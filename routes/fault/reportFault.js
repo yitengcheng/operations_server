@@ -1,26 +1,24 @@
 /**
  * 小程序上报故障接口
  */
-const router = require("koa-router")();
-const CompanyTemplate = require("../../models/companyTemplateSchema");
-const Scheduling = require("../../models/schedulingSchema");
-const User = require("../../models/userSchema");
-const Role = require("../../models/roleSchema");
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
-const mongoose = require("mongoose");
-const config = require("../../config");
-const dayjs = require("dayjs");
-const sendSMS = require("../../utils/sms");
+const router = require('koa-router')();
+const CompanyTemplate = require('../../models/companyTemplateSchema');
+const Scheduling = require('../../models/schedulingSchema');
+const User = require('../../models/userSchema');
+const Role = require('../../models/roleSchema');
+const util = require('../../utils/util');
+const mongoose = require('mongoose');
+const config = require('../../config');
+const dayjs = require('dayjs');
+const sendSMS = require('../../utils/sms');
 
-router.post("/applet/reportFault", async (ctx) => {
+router.post('/applet/reportFault', async (ctx) => {
   const db = mongoose.createConnection(config.URL);
   try {
     const { data, templateId, assetsId, code } = ctx.request.body;
-    const { user } = ctx.state;
     const companyTemplate = await CompanyTemplate.findById(templateId);
     if (!companyTemplate) {
-      ctx.body = util.fail("", "请先设置公司故障模板");
+      ctx.body = util.fail('', '请先设置公司故障模板');
       return;
     }
     let schema = await util.guzhangSchemaProperty(companyTemplate.content);
@@ -28,7 +26,7 @@ router.post("/applet/reportFault", async (ctx) => {
     const phoneNumber = await util.getAppletPhonenumber(code);
     const scheduling = await Scheduling.findOne({
       companyId: companyTemplate.companyId,
-      dateOnDuty: dayjs().format("YYYY-MM-DD"),
+      dateOnDuty: dayjs().format('YYYY-MM-DD'),
     });
     let staff;
     let staffCount = 0;
@@ -44,13 +42,13 @@ router.post("/applet/reportFault", async (ctx) => {
       }
     });
     if (!staff) {
-      const role = await Role.findOne({ name: "运维公司" });
+      const role = await Role.findOne({ name: '运维公司' });
       staff = await User.findOne({ companyId: companyTemplate.companyId, roleId: role._id });
     }
     if (staff?.phonenumber) {
       sendSMS(staff?.phonenumber);
     }
-    const res = await faultModule.create({
+    await faultModule.create({
       ...data,
       assetsId,
       dispose: new mongoose.Types.ObjectId(staff._id),
@@ -58,8 +56,8 @@ router.post("/applet/reportFault", async (ctx) => {
       createTime: Date.now(),
       designateTime: Date.now(),
       phoneNumber,
-    })
-    ctx.body = util.success({}, "上报成功");
+    });
+    ctx.body = util.success({}, '上报成功');
   } catch (error) {
     ctx.body = util.fail(error.stack);
   } finally {

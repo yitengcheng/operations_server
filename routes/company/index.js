@@ -1,5 +1,5 @@
-const addCompany = require("./addCompany");
-const companyList = require("./companyList");
+const addCompany = require('./addCompany');
+const companyList = require('./companyList');
 
 module.exports = {
   addCompany,

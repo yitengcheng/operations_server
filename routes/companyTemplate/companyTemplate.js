@@ -1,12 +1,11 @@
 /**
  * 公司模板信息接口
  */
-const router = require("koa-router")();
-const CompanyTemplate = require("../../models/companyTemplateSchema");
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
+const router = require('koa-router')();
+const CompanyTemplate = require('../../models/companyTemplateSchema');
+const util = require('../../utils/util');
 
-router.post("/template", async (ctx) => {
+router.post('/template', async (ctx) => {
   try {
     const { type } = ctx.request.body;
     const { user } = ctx.state;

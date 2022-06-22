@@ -1,46 +1,45 @@
 /**
  * 巡检统计接口
  */
-const router = require("koa-router")();
-const InspectionReport = require("../../models/inspectionReportSchema");
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
-const mongoose = require("mongoose");
-const config = require("../../config");
+const router = require('koa-router')();
+const InspectionReport = require('../../models/inspectionReportSchema');
+const util = require('../../utils/util');
+const mongoose = require('mongoose');
 
-router.post("/report/app/patrol", async (ctx) => {
+router.post('/report/app/patrol', async (ctx) => {
   try {
     const { addressId } = ctx.request.body;
     const { user } = ctx.state;
-    let params, lookupParams, matchParams;
+    let params; let lookupParams; let
+      matchParams;
     if (addressId) {
       matchParams = {
         companyId: new mongoose.Types.ObjectId(user.companyId),
         parentId: new mongoose.Types.ObjectId(addressId),
       };
       params = {
-        _id: "$childrenId",
+        _id: '$childrenId',
         count: { $sum: 1 },
       };
       lookupParams = {
-        from: "inspectionAddress",
-        localField: "_id",
-        foreignField: "_id",
-        as: "address",
+        from: 'inspectionAddress',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'address',
       };
     } else {
       matchParams = {
         companyId: new mongoose.Types.ObjectId(user.companyId),
       };
       params = {
-        _id: "$parentId",
+        _id: '$parentId',
         count: { $sum: 1 },
       };
       lookupParams = {
-        from: "inspectionAddress",
-        localField: "_id",
-        foreignField: "_id",
-        as: "address",
+        from: 'inspectionAddress',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'address',
       };
     }
     const res = await InspectionReport.aggregate().match(matchParams).group(params).lookup(lookupParams);

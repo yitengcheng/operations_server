@@ -1,17 +1,16 @@
 /**
  * 巡检地点列表接口(分页)
  */
-const router = require("koa-router")();
-const InspectionAddress = require("../../models/inspectionAddressSchema");
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
+const router = require('koa-router')();
+const InspectionAddress = require('../../models/inspectionAddressSchema');
+const util = require('../../utils/util');
 
-router.post("/patrol/address/list", async (ctx) => {
+router.post('/patrol/address/list', async (ctx) => {
   try {
-    const { office, id, parentId = undefined, keyword } = ctx.request.body;
+    const { parentId = undefined, keyword } = ctx.request.body;
     const { page, skipIndex } = util.pager(ctx.request.body);
     const { user } = ctx.state;
-    const fuzzyQuery = util.fuzzyQuery(["office"], keyword);
+    const fuzzyQuery = util.fuzzyQuery(['office'], keyword);
     const params = { companyId: user.companyId, parentId, ...fuzzyQuery };
     const query = InspectionAddress.find(params, { office: 1, headUser: 1 });
     const list = await query.skip(skipIndex).limit(page.pageSize);

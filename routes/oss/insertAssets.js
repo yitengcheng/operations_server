@@ -1,27 +1,24 @@
 /**
  * 批量录入资产
  */
-const router = require("koa-router")();
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
-const koaBody = require("koa-body");
-const path = require("path");
-const qiniu = require("qiniu");
-const fs = require("fs");
-const xlsx = require("xlsx");
-const _ = require("lodash");
-const CompanyTemplate = require("../../models/companyTemplateSchema");
-const { default: mongoose } = require("mongoose");
-const config = require("../../config");
+const router = require('koa-router')();
+const util = require('../../utils/util');
+const koaBody = require('koa-body');
+const path = require('path');
+const fs = require('fs');
+const xlsx = require('xlsx');
+const CompanyTemplate = require('../../models/companyTemplateSchema');
+const { default: mongoose } = require('mongoose');
+const config = require('../../config');
 
 router.post(
-  "/upload/insertAsstes",
+  '/upload/insertAsstes',
   koaBody({
     // 支持文件格式
     multipart: true,
     formidable: {
       // 上传目录
-      uploadDir: path.join(__dirname, "../../public/upload"),
+      uploadDir: path.join(__dirname, '../../public/upload'),
       // 保留文件扩展名
       keepExtensions: true,
       maxFileSize: 52428800,
@@ -30,11 +27,11 @@ router.post(
   async (ctx) => {
     const db = mongoose.createConnection(config.URL);
     try {
-      const file = ctx.request.files.file;
+      const { file } = ctx.request.files;
       const { user } = ctx.state;
-      const companyTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: "1" });
+      const companyTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: '1' });
       if (!companyTemplate) {
-        ctx.body = util.fail("", "请先设置公司资产模板");
+        ctx.body = util.fail('', '请先设置公司资产模板');
         return;
       }
       let schema = await util.schemaProperty(companyTemplate.content);
@@ -50,7 +47,7 @@ router.post(
     } finally {
       db.close();
     }
-  }
+  },
 );
 
 module.exports = router;

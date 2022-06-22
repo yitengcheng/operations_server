@@ -1,19 +1,18 @@
 /**
  * 获取员工列表
  */
-const router = require("koa-router")();
-const User = require("../../models/userSchema");
-const Role = require("../../models/roleSchema");
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
+const router = require('koa-router')();
+const User = require('../../models/userSchema');
+const Role = require('../../models/roleSchema');
+const util = require('../../utils/util');
 
-router.post("/system/user/list", async (ctx) => {
+router.post('/system/user/list', async (ctx) => {
   try {
     const { keyword } = ctx.request.body;
     const { page, skipIndex } = util.pager(ctx.request.body);
     const { user } = ctx.state;
-    const role = await Role.findOne({ name: "运维工人" });
-    const fuzzyQuery = util.fuzzyQuery(["nickName", "username", "phonenumber"], keyword);
+    const role = await Role.findOne({ name: '运维工人' });
+    const fuzzyQuery = util.fuzzyQuery(['nickName', 'username', 'phonenumber'], keyword);
     const params = { companyId: user.companyId, roleId: role._id, ...fuzzyQuery };
     const query = User.find(params, {
       _id: 1,

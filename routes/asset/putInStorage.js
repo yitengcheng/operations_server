@@ -1,20 +1,19 @@
 /**
  * 资产入库接口
  */
-const router = require("koa-router")();
-const CompanyTemplate = require("../../models/companyTemplateSchema");
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
-const mongoose = require("mongoose");
-const config = require("../../config");
+const router = require('koa-router')();
+const CompanyTemplate = require('../../models/companyTemplateSchema');
+const util = require('../../utils/util');
+const mongoose = require('mongoose');
+const config = require('../../config');
 
-router.post("/assets/insert", async (ctx) => {
+router.post('/assets/insert', async (ctx) => {
   const db = mongoose.createConnection(config.URL);
   try {
     const { data, templateId, id } = ctx.request.body;
     const companyTemplate = await CompanyTemplate.findById(templateId);
     if (!companyTemplate) {
-      ctx.body = util.fail("", "请先设置公司资产模板");
+      ctx.body = util.fail('', '请先设置公司资产模板');
       return;
     }
     let schema = await util.schemaProperty(companyTemplate.content);
@@ -22,15 +21,14 @@ router.post("/assets/insert", async (ctx) => {
     if (id) {
       const res = await assetsModule.findByIdAndUpdate(id, { $set: data }, { new: true });
       if (res) {
-        ctx.body = util.success({}, "修改成功");
+        ctx.body = util.success({}, '修改成功');
       } else {
-        ctx.body = util.fail("", "修改失败");
+        ctx.body = util.fail('', '修改失败');
       }
-    } else {
-      const res = new assetsModule(data);
-      res.save();
-      ctx.body = util.success({}, "添加成功");
+      return;
     }
+    await assetsModule.create(data);
+    ctx.body = util.success({}, '添加成功');
   } catch (error) {
     ctx.body = util.fail(error.stack);
   } finally {

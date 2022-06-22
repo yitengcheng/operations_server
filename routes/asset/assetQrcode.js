@@ -1,25 +1,24 @@
 /**
  * 资产二维码接口
  */
-const router = require("koa-router")();
-const CompanyTemplate = require("../../models/companyTemplateSchema");
-const util = require("../../utils/util");
-const log4j = require("../../utils/log4");
-const mongoose = require("mongoose");
-const config = require("../../config");
-const qr = require("qr-image");
-const tts = require("text-to-svg").loadSync();
-const path = require("path");
-const sharp = require("sharp");
+const router = require('koa-router')();
+const CompanyTemplate = require('../../models/companyTemplateSchema');
+const util = require('../../utils/util');
+const mongoose = require('mongoose');
+const config = require('../../config');
+const qr = require('qr-image');
+const tts = require('text-to-svg').loadSync();
+const path = require('path');
+const sharp = require('sharp');
 
-router.post("/assets/downOneQr", async (ctx) => {
+router.post('/assets/downOneQr', async (ctx) => {
   const db = mongoose.createConnection(config.URL);
   try {
     const { id, key } = ctx.request.body;
     const { user } = ctx.state;
-    const companyTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: "1" });
+    const companyTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: '1' });
     if (!companyTemplate) {
-      ctx.body = util.fail("", "请先设置公司资产模板");
+      ctx.body = util.fail('', '请先设置公司资产模板');
       return;
     }
     let schema = await util.schemaProperty(companyTemplate.content);
@@ -31,15 +30,15 @@ router.post("/assets/downOneQr", async (ctx) => {
         x: 0,
         y: 0,
         fontSize: 30,
-        anchor: "top",
-      })
+        anchor: 'top',
+      }),
     );
     const qrImage = await sharp(
-      qr.imageSync(`https://yyyw.qiantur.com/applet/companyId=${user.companyId}&assetsId=${id}`, { type: "png" })
+      qr.imageSync(`https://yyyw.qiantur.com/applet/companyId=${user.companyId}&assetsId=${id}`, { type: 'png' }),
     )
       .resize({ width: 520, height: 520 })
       .toBuffer();
-    const resQR = await sharp(path.join(__dirname, "../../public/images/source.png"))
+    const resQR = await sharp(path.join(__dirname, '../../public/images/source.png'))
       .composite([
         {
           input: tSvg,
@@ -55,13 +54,13 @@ router.post("/assets/downOneQr", async (ctx) => {
       .withMetadata() // 在输出图像中包含来自输入图像的所有元数据(EXIF、XMP、IPTC)。
       .webp({
         quality: 90,
-      }) //使用这些WebP选项来输出图像。
+      }) // 使用这些WebP选项来输出图像。
       // .toFile(path.join(__dirname, `../../public/images/${id}.png`))
       .toBuffer()
       .catch((err) => {
         console.log(err);
       });
-    const imgBase64 = resQR?.toString("base64");
+    const imgBase64 = resQR?.toString('base64');
     ctx.body = util.success({ imgBase64: `data:image/png;base64,${imgBase64}` });
   } catch (error) {
     ctx.body = util.fail(error.stack);
