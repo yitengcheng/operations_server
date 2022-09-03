@@ -40,13 +40,15 @@ router.post(
       let assetsModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
       const workbook = xlsx.readFile(file.path);
       const data = xlsx.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-      data?.map(async (item) => {
+      let result = [];
+      for (const item of data) {
         const res = await customerSchema.findOne({ name: item?.['所属客户'] });
         item['customerId'] = res?._id;
         delete item?.['所属客户'];
-      });
-      const res = await assetsModule.insertMany(data);
+        result.push(item);
+      }
       fs.unlinkSync(file.path);
+      const res = await assetsModule.insertMany(result);
       ctx.body = util.success({}, `成功插入${res?.length ?? '0'}条`);
     } catch (error) {
       ctx.body = util.fail(error.stack);
