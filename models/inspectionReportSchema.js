@@ -7,6 +7,7 @@ const schema = mongoose.Schema({
   companyId: { type: mongoose.Types.ObjectId, ref: 'companys' }, // 公司Id
   parentId: { type: mongoose.Types.ObjectId, ref: 'inspectionAddress' }, // 巡检点
   childrenId: { type: mongoose.Types.ObjectId, ref: 'inspectionAddress' }, // 办公点
+  customerId: { type: mongoose.Types.ObjectId, ref: 'customers' }, // 所属客户
   remark: String, // 巡检情况
   status: Number, // 状态 1 已完成 2 维修中
   remarkPhoto: [{ type: String }], // 巡检照片

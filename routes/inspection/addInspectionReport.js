@@ -31,6 +31,7 @@ router.post('/patrol/insert', async (ctx) => {
       companyId: user.companyId,
       status,
       remarkPhoto,
+      customerId: inspectionAddress?.customerId,
       ...statusTime,
     });
     inspectionReport.save();

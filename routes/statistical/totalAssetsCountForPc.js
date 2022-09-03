@@ -18,7 +18,12 @@ router.post('/statistical/totalAssetsCount', async (ctx) => {
     }
     let assetsSchema = await util.schemaProperty(assetsTemplate.content);
     let assetsModule = db.model(assetsTemplate.moduleName, assetsSchema, assetsTemplate.moduleName);
-    const assetTotal = await assetsModule.countDocuments();
+    let assetTotal;
+    if (user?.roleId) {
+      assetTotal = await assetsModule.countDocuments();
+    } else {
+      assetTotal = await assetsModule.countDocuments({ customerId: user?._id });
+    }
     ctx.body = util.success({ assetTotal });
   } catch (error) {
     ctx.body = util.fail(error.stack);

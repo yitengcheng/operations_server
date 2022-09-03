@@ -15,23 +15,23 @@ router.post('/statistical/total/fault', async (ctx) => {
   const db = mongoose.createConnection(config.URL);
   try {
     const { user } = ctx.state;
-    const { type, dateType } = ctx.request.body; // type 1 待处理 2 处理成功 3 拒绝处理
+    const { type, dateType } = ctx.request.body.params; // type 1 待处理 2 处理成功 3 拒绝处理
     let createTimeParams = {};
-    if (dateType === 1) {
+    if (dateType == 1) {
       createTimeParams = {
         createTime: {
           $gte: dayjs(dayjs().startOf('month')).toDate(),
           $lte: dayjs(dayjs().endOf('month')).toDate(),
         },
       };
-    } else if (dateType === 2) {
+    } else if (dateType == 2) {
       createTimeParams = {
         createTime: {
           $gte: dayjs(dayjs().startOf('quarter')).toDate(),
           $lte: dayjs(dayjs().endOf('quarter')).toDate(),
         },
       };
-    } else if (dateType === 3) {
+    } else if (dateType == 3) {
       createTimeParams = {
         createTime: {
           $gte: dayjs(dayjs().startOf('year')).toDate(),
@@ -39,12 +39,18 @@ router.post('/statistical/total/fault', async (ctx) => {
         },
       };
     }
+    let customer = {};
+    if (!user?.roleId) {
+      customer = { customerId: user?._id };
+    }
     const faultTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: '2' });
     let faultSchema = await util.guzhangSchemaProperty(faultTemplate.content);
     let faultFields = await util.schemaProperty(faultTemplate.content);
     let faultModule = db.model(faultTemplate.moduleName, faultSchema, faultTemplate.moduleName);
+    let select = await util.schemaSelect(faultTemplate.content);
     const params = typeof type === 'undefined' ? {} : { status: type };
-    const data = await faultModule.find({ ...params, ...createTimeParams });
+    const data = await faultModule.find({ ...params, ...createTimeParams, ...customer }, select);
+    delete faultFields.customerId;
     const fields = _.keys(faultFields);
     ctx.body = util.success({ data, fields });
   } catch (error) {

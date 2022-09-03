@@ -17,9 +17,13 @@ router.post('/statistical/totalFaultCount', async (ctx) => {
       return;
     }
     let faultSchema = await util.guzhangSchemaProperty(faultTemplate.content);
-
     let faultModule = db.model(faultTemplate.moduleName, faultSchema, faultTemplate.moduleName);
-    const faultTotal = await faultModule.countDocuments();
+    let faultTotal;
+    if (user?.roleId) {
+      faultTotal = await faultModule.countDocuments();
+    } else {
+      faultTotal = await faultModule.countDocuments({ customerId: user?._id });
+    }
     ctx.body = util.success({ faultTotal });
   } catch (error) {
     ctx.body = util.fail(error.stack);

@@ -7,20 +7,27 @@ const util = require('../../utils/util');
 
 router.post('/patrol/address/handle', async (ctx) => {
   try {
-    const { office, id, parentId = undefined, headUser = undefined } = ctx.request.body;
+    const { office, id, parentId = undefined, headUser = undefined, customerId = undefined } = ctx.request.body;
     const { user } = ctx.state;
     let res;
     let principal;
+    let customer;
     if (headUser) {
       principal = headUser;
     } else {
       const inspection = await InspectionAddress.findById(parentId);
       principal = inspection.headUser;
     }
+    if (customerId) {
+      customer = customerId;
+    } else {
+      const inspection = await InspectionAddress.findById(parentId);
+      customer = inspection.customerId;
+    }
     if (id) {
       res = await InspectionAddress.findByIdAndUpdate(
         id,
-        { $set: { office, parentId, companyId: user.companyId, headUser: principal } },
+        { $set: { office, parentId, companyId: user.companyId, headUser: principal, customerId: customer } },
         { upsert: true, new: true },
       );
     } else {
@@ -29,6 +36,7 @@ router.post('/patrol/address/handle', async (ctx) => {
         parentId,
         headUser: principal,
         companyId: user.companyId,
+        customerId: customer,
       });
       res.save();
     }

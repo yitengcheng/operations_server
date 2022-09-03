@@ -30,10 +30,15 @@ router.post('/statistical/count/inspectionByDate', async (ctx) => {
         $lte: dayjs(dayjs().endOf('year')).toDate(),
       };
     }
+    let customer = {};
+    if (!user?.roleId) {
+      customer = { customerId: mongoose.Types.ObjectId(user?._id) };
+    }
     const res = await InspectionReport.aggregate()
       .match({
         companyId: mongoose.Types.ObjectId(user.companyId),
         createTime: createTimeParams,
+        ...customer,
       })
       .group({ _id: { $dateToString: { format: '%Y-%m-%d', date: '$createTime' } }, count: { $sum: 1 } });
     ctx.body = util.success(res);

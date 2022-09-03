@@ -13,11 +13,16 @@ router.post('/statistical/total/assets', async (ctx) => {
   try {
     const { user } = ctx.state;
     const { params } = ctx.request.body;
+    let customer = {};
+    if (!user?.roleId) {
+      customer = { customerId: user?._id };
+    }
     const assetsTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: '1' });
     let assetsSchema = await util.schemaProperty(assetsTemplate.content);
-
     let assetsModule = db.model(assetsTemplate.moduleName, assetsSchema, assetsTemplate.moduleName);
-    const data = await assetsModule.find(params);
+    let select = await util.schemaSelect(assetsTemplate.content);
+    const data = await assetsModule.find({ ...params, ...customer }, select);
+    delete assetsSchema.customerId;
     const fields = _.keys(assetsSchema);
     ctx.body = util.success({ data, fields });
   } catch (error) {

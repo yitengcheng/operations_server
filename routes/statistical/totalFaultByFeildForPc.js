@@ -15,9 +15,13 @@ router.post('/statistical/total/faultByField', async (ctx) => {
     const { params } = ctx.request.body;
     const faultTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: '2' });
     let faultSchema = await util.schemaProperty(faultTemplate.content);
-
+    let customer = {};
+    if (!user?.roleId) {
+      customer = { customerId: user?._id };
+    }
     let faultModule = db.model(faultTemplate.moduleName, faultSchema, faultTemplate.moduleName);
-    const data = await faultModule.find(params);
+    const data = await faultModule.find({ ...params, ...customer });
+    delete faultSchema.customerId;
     const fields = _.keys(faultSchema);
     ctx.body = util.success({ data, fields });
   } catch (error) {

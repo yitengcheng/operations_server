@@ -8,6 +8,7 @@ const schema = mongoose.Schema({
   office: String, // 办公点名称
   parentId: { type: mongoose.Types.ObjectId, ref: 'inspectionAddress' }, // 上级地点id
   headUser: { type: mongoose.Types.ObjectId, ref: 'users' }, // 巡检点负责人
+  customerId: { type: mongoose.Types.ObjectId, ref: 'customers' }, // 所属客户
 });
 
 module.exports = mongoose.model('inspectionAddress', schema, 'inspectionAddress'); // 模型名 schema 数据库集合名

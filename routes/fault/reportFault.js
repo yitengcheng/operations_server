@@ -48,9 +48,18 @@ router.post('/applet/reportFault', async (ctx) => {
     if (staff?.phonenumber) {
       sendSMS(staff?.phonenumber);
     }
+    const assetsTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: '1' });
+    if (!assetsTemplate) {
+      ctx.body = util.fail('', '请先在手机端设置资产模板');
+      return;
+    }
+    let assetsSchema = await util.schemaProperty(assetsTemplate.content);
+    let assetsModule = db.model(assetsTemplate.moduleName, assetsSchema, assetsTemplate.moduleName);
+    const asset = await assetsModule.findById(assetsId);
     await faultModule.create({
       ...data,
       assetsId,
+      customerId: asset.customerId,
       dispose: new mongoose.Types.ObjectId(staff._id),
       status: 1,
       createTime: Date.now(),

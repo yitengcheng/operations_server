@@ -8,7 +8,13 @@ const util = require('../../utils/util');
 router.post('/statistical/totalServiceReportCount', async (ctx) => {
   try {
     const { user } = ctx.state;
-    const reportTotal = await InspectionReport.countDocuments({ companyId: user.companyId, status: 2 });
+    let reportTotal;
+    if (user?.roleId) {
+      reportTotal = await InspectionReport.countDocuments({ companyId: user.companyId });
+    } else {
+      reportTotal = await InspectionReport.countDocuments({ companyId: user.companyId, customerId: user?._id });
+    }
+
     ctx.body = util.success({ reportTotal });
   } catch (error) {
     ctx.body = util.fail(error.stack);

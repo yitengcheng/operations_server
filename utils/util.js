@@ -61,7 +61,7 @@ module.exports = {
   },
   schemaProperty(content) {
     let property = JSON.parse(content);
-    let res = {};
+    let res = { customerId: String };
     return new Promise((resolve) => {
       for (const item in property) {
         switch (property[item].type) {
@@ -101,7 +101,7 @@ module.exports = {
   },
   guzhangSchemaProperty(content) {
     let property = JSON.parse(content);
-    let res = {};
+    let res = { customerId: String };
     /**
      * 故障模板字段
      * reportUser：运维公司上报人员ID
@@ -298,7 +298,8 @@ module.exports = {
     });
   },
   async getAppletPhonenumber(code) {
-    const getTokenUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxf40490ad0fe3246b&secret=fb186bd9419d53e191f9997b5af4190a';
+    const getTokenUrl =
+      'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxf40490ad0fe3246b&secret=fb186bd9419d53e191f9997b5af4190a';
     const response = await axios.get(getTokenUrl);
     const { access_token } = response.data;
     const getPhonenumberUrl = `https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token=${access_token}`;

@@ -10,6 +10,7 @@ const asset = require('./asset');
 const statistical = require('./statistical');
 const texus = require('./texus');
 const taintedChicken = require('./taintedChicken');
+const customers = require('./customers');
 
 const routers = {
   ...users,
@@ -24,6 +25,7 @@ const routers = {
   ...statistical,
   ...texus,
   ...taintedChicken,
+  ...customers,
 };
 
 module.exports = routers;

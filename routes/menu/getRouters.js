@@ -8,7 +8,7 @@ const util = require('../../utils/util');
 router.post('/getRouters', async (ctx) => {
   try {
     const { user } = ctx.state; // 通过中间件获取的token中携带的数据
-    const data = await Menu.find({ roleId: { $in: [user.roleId._id] } }, { name: 1, menuType: 1 });
+    const data = await Menu.find({ roleId: { $in: [user?.roleId?._id] } }, { name: 1, menuType: 1 });
     if (data.length > 0) {
       ctx.body = util.success(data);
     } else {

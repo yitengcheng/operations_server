@@ -42,10 +42,21 @@ router.post('/report/app/fault', async (ctx) => {
     }
     let schema = await util.guzhangSchemaProperty(companyTemplate.content);
     let faultModule = db.model(companyTemplate.moduleName, schema, companyTemplate.moduleName);
-    const faultTotal = await faultModule.countDocuments(createTimeParams);
-    const faultCompleteTotal = await faultModule.countDocuments({ status: 2, ...createTimeParams });
-    const faultPendingTotal = await faultModule.countDocuments({ status: 1, ...createTimeParams });
-    const faultRefuseTotal = await faultModule.countDocuments({ status: 3, ...createTimeParams });
+    let faultTotal;
+    let faultCompleteTotal;
+    let faultPendingTotal;
+    let faultRefuseTotal;
+    if (user?.roleId) {
+      faultTotal = await faultModule.countDocuments(createTimeParams);
+      faultCompleteTotal = await faultModule.countDocuments({ status: 2, ...createTimeParams });
+      faultPendingTotal = await faultModule.countDocuments({ status: 1, ...createTimeParams });
+      faultRefuseTotal = await faultModule.countDocuments({ status: 3, ...createTimeParams });
+    } else {
+      faultTotal = await faultModule.countDocuments({ ...createTimeParams, customerId: user?._id });
+      faultCompleteTotal = await faultModule.countDocuments({ status: 2, ...createTimeParams, customerId: user?._id });
+      faultPendingTotal = await faultModule.countDocuments({ status: 1, ...createTimeParams, customerId: user?._id });
+      faultRefuseTotal = await faultModule.countDocuments({ status: 3, ...createTimeParams, customerId: user?._id });
+    }
     ctx.body = util.success({ faultTotal, faultCompleteTotal, faultPendingTotal, faultRefuseTotal });
   } catch (error) {
     ctx.body = util.fail(error.stack);

@@ -15,9 +15,15 @@ router.post('/statistical/count/assetsByField', async (ctx) => {
     const { classification, status } = ctx.request.body;
     const assetsTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: '1' });
     let assetsSchema = await util.schemaProperty(assetsTemplate.content);
-
     let assetsModule = db.model(assetsTemplate.moduleName, assetsSchema, assetsTemplate.moduleName);
-    const classifyRes = await assetsModule.aggregate().group({ _id: `$${classification}`, total: { $sum: 1 } });
+    let customer = {};
+    if (!user?.roleId) {
+      customer = { customerId: user?._id };
+    }
+    const classifyRes = await assetsModule
+      .aggregate()
+      .match(customer)
+      .group({ _id: `$${classification}`, total: { $sum: 1 } });
     const classifyList = _.map(classifyRes, '_id');
     let res = {};
     for (const [index, classify] of classifyList.entries()) {
@@ -25,7 +31,7 @@ router.post('/statistical/count/assetsByField', async (ctx) => {
         total: classifyRes?.[index]?.total,
         status: await assetsModule
           .aggregate()
-          .match({ [classification]: classify })
+          .match({ [classification]: classify, ...customer })
           .group({ _id: `$${status}`, count: { $sum: 1 } }),
       };
     }

@@ -16,7 +16,14 @@ router.post('/statistical/count/faultByField', async (ctx) => {
     const faultTemplate = await CompanyTemplate.findOne({ companyId: user.companyId, type: '2' });
     let faultSchema = await util.guzhangSchemaProperty(faultTemplate.content);
     let faultModule = db.model(faultTemplate.moduleName, faultSchema, faultTemplate.moduleName);
-    const classifyRes = await faultModule.aggregate().group({ _id: `$${classification}`, total: { $sum: 1 } });
+    let customer = {};
+    if (!user?.roleId) {
+      customer = { customerId: user?._id };
+    }
+    const classifyRes = await faultModule
+      .aggregate()
+      .match(customer)
+      .group({ _id: `$${classification}`, total: { $sum: 1 } });
     const classifyList = _.map(classifyRes, '_id');
     let res = {};
     for (const [index, classify] of classifyList.entries()) {
@@ -24,7 +31,7 @@ router.post('/statistical/count/faultByField', async (ctx) => {
         total: classifyRes?.[index]?.total,
         status: await faultModule
           .aggregate()
-          .match({ [classification]: classify })
+          .match({ [classification]: classify, ...customer })
           .group({ _id: `$${status}`, count: { $sum: 1 } }),
       };
     }
