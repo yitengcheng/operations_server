@@ -49,7 +49,7 @@ router.post('/statistical/total/fault', async (ctx) => {
     let faultModule = db.model(faultTemplate.moduleName, faultSchema, faultTemplate.moduleName);
     let select = await util.schemaSelect(faultTemplate.content);
     let params = {};
-    if (typeof type !== 'undefined' || type !== '0') {
+    if (typeof type !== 'undefined' && type !== '0') {
       params = { status: type };
     }
     const data = await faultModule.find({ ...params, ...createTimeParams, ...customer }, select);
