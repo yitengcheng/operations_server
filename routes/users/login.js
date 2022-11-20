@@ -34,7 +34,7 @@ router.post('/app/login', async (ctx) => {
       },
     ).populate('roleId', { name: 1 });
     if (!res) {
-      res = await customerSchema.findOne({ username, password: md5(password) });
+      res = await customerSchema.findOne({ username, password: md5(password) }, { password: 0 });
     }
     const token = jwt.sign({ ...res?._doc }, 'cdxs', { expiresIn: '24h' });
     if (res) {
