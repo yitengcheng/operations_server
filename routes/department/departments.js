@@ -10,7 +10,7 @@ router.post('/department/departments', async (ctx) => {
   try {
     const { user } = ctx.state;
     const departments = await departmentSchema.find(
-      { belongs: user._id, delFlag: false },
+      { belongs: user?.belongs ?? user._id, delFlag: false },
       { _id: 1, departmentName: 1 },
     );
     ctx.body = util.success(departments, '');

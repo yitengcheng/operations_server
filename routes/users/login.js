@@ -8,6 +8,7 @@ const util = require('../../utils/util');
 const jwt = require('jsonwebtoken');
 const md5 = require('md5');
 const dayjs = require('dayjs');
+const employeesSchema = require('../../models/employeesSchema');
 
 router.post('/app/login', async (ctx) => {
   try {
@@ -35,6 +36,9 @@ router.post('/app/login', async (ctx) => {
     ).populate('roleId', { name: 1 });
     if (!res) {
       res = await customerSchema.findOne({ username, password: md5(password) }, { password: 0 });
+    }
+    if (!res) {
+      res = await employeesSchema.findOne({ phone: username, password: md5(password) }, { password: 0 });
     }
     const token = jwt.sign({ ...res?._doc }, 'cdxs', { expiresIn: '24h' });
     if (res) {

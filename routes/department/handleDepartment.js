@@ -19,7 +19,7 @@ router.post('/department/handleDepartment', async (ctx) => {
       const result = await departmentSchema.updateOne({ _id: id, delFlag: false }, { departmentName, parentId });
       ctx.body = util.success({}, '修改成功');
     } else {
-      await departmentSchema.create({ departmentName, belongs: user._id, parentId });
+      await departmentSchema.create({ departmentName, belongs: user?.belongs ?? user._id, parentId, delFlag: false });
       ctx.body = util.success({}, '添加成功');
     }
   } catch (error) {

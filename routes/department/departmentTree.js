@@ -5,6 +5,7 @@ const router = require('koa-router')();
 const departmentSchema = require('../../models/departmentSchema');
 const util = require('../../utils/util');
 const lodash = require('lodash');
+const employeesSchema = require('../../models/employeesSchema');
 
 const findChildren = async (depart) => {
   const documents = await departmentSchema.find({ parentId: depart?._id, delFlag: false });
@@ -26,12 +27,13 @@ router.post('/department/departmentTree', async (ctx) => {
     const { departmentName, parentId } = ctx.request.body;
     const { user } = ctx.state;
     const departments = await departmentSchema.find({
-      belongs: user._id,
+      belongs: user?.belongs ?? user._id,
       parentId: { $exists: false },
       delFlag: false,
     });
     let departmentDocs = lodash.map(departments, '_doc');
-    let result = { name: `共有${0}人`, children: [] };
+    const count = await employeesSchema.countDocuments({ belongs: user?.belongs ?? user._id, delFlag: false });
+    let result = { name: `共有${count}人`, children: [] };
     for (const department of departmentDocs) {
       result.children.push(await findChildren(department));
     }

@@ -12,6 +12,7 @@ const texus = require('./texus');
 const taintedChicken = require('./taintedChicken');
 const customers = require('./customers');
 const department = require('./department');
+const employees = require('./employees');
 
 const routers = {
   ...users,
@@ -28,6 +29,7 @@ const routers = {
   ...taintedChicken,
   ...customers,
   ...department,
+  ...employees,
 };
 
 module.exports = routers;
