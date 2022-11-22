@@ -15,6 +15,7 @@ const department = require('./department');
 const employees = require('./employees');
 const suppliers = require('./suppliers');
 const options = require('./options');
+const goods = require('./goods');
 
 const routers = {
   ...users,
@@ -34,6 +35,7 @@ const routers = {
   ...employees,
   ...suppliers,
   ...options,
+  ...goods,
 };
 
 module.exports = routers;
