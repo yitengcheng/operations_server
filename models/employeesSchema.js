@@ -4,7 +4,7 @@
 const mongoose = require('mongoose');
 
 const schema = mongoose.Schema({
-  delFlag: Boolean, // 删除标识
+  delFlag: { type: Boolean, default: false }, // 删除标识
   departmentId: { type: mongoose.Types.ObjectId, ref: 'departments' }, // 所属部门
   belongs: { type: mongoose.Types.ObjectId, ref: 'customers' }, // 所属
   name: String, // 姓名

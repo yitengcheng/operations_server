@@ -13,6 +13,7 @@ const taintedChicken = require('./taintedChicken');
 const customers = require('./customers');
 const department = require('./department');
 const employees = require('./employees');
+const suppliers = require('./suppliers');
 
 const routers = {
   ...users,
@@ -30,6 +31,7 @@ const routers = {
   ...customers,
   ...department,
   ...employees,
+  ...suppliers,
 };
 
 module.exports = routers;

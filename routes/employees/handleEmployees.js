@@ -17,7 +17,7 @@ router.post('/employees/handleEmployee', async (ctx) => {
       return;
     }
     if (id) {
-      const result = await employeesSchema.updateOne(
+      await employeesSchema.updateOne(
         { _id: id, delFlag: false },
         { departmentId, name, phone, type, password: password ? md5(password) : undefined, remark },
       );
