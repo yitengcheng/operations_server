@@ -20,7 +20,6 @@ const findChildren = async (depart) => {
 router.post('/department/delDepartment', async (ctx) => {
   try {
     const { id, flagAll } = ctx.request.body;
-    const { user } = ctx.state;
     if (flagAll) {
       const department = await departmentSchema.findOne({
         _id: id,

@@ -11,7 +11,6 @@ const CompanyTemplate = require('../../models/companyTemplateSchema');
 const customerSchema = require('../../models/customerSchema');
 const { default: mongoose } = require('mongoose');
 const config = require('../../config');
-const lodash = require('lodash');
 
 router.post(
   '/upload/insertAsstes',

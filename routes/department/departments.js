@@ -4,7 +4,6 @@
 const router = require('koa-router')();
 const departmentSchema = require('../../models/departmentSchema');
 const util = require('../../utils/util');
-const lodash = require('lodash');
 
 router.post('/department/departments', async (ctx) => {
   try {

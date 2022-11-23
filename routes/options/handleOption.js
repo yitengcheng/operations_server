@@ -11,7 +11,7 @@ router.post('/options/handleOption', async (ctx) => {
     const { user } = ctx.state;
     const option = await optionSchema.findOne({ name, belongs: user?.belongs ?? user._id, delFlag: false });
     if (option && id !== option._id.toString()) {
-      ctx.body = util.fail('', `已有同名选项`);
+      ctx.body = util.fail('', '已有同名选项');
       return;
     }
     if (id) {

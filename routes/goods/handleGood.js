@@ -3,7 +3,6 @@
  */
 const router = require('koa-router')();
 const util = require('../../utils/util');
-const Role = require('../../models/roleSchema');
 const goodsSchema = require('../../models/goodsSchema');
 
 router.post('/goods/handleGood', async (ctx) => {
@@ -25,7 +24,7 @@ router.post('/goods/handleGood', async (ctx) => {
     if (id) {
       await goodsSchema.updateOne(
         { _id: id, delFlag: false },
-        { name, models, unit, classification, price, inventoryNumber, inventoryMax, inventoryMin, supplierId, remark },
+        { name, models, unit, classification, price, inventoryMax, inventoryMin, supplierId, remark },
       );
       ctx.body = util.success({}, '修改成功');
     } else {

@@ -43,12 +43,12 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@iceworks/spec": "^1.6.0",
-    "eslint": "^7.22.0",
+    "eslint": "^8.0.0",
     "log4js": "^6.3.0",
     "md5": "^2.3.0",
     "nodemon": "^2.0.15",
     "prettier": "^2.1.0",
-    "stylelint": "^13.7.2"
+    "stylelint": "^14.0.0",
+    "@applint/spec": "^1.0.0"
   }
 }

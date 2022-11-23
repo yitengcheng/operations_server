@@ -3,7 +3,6 @@
  */
 const router = require('koa-router')();
 const util = require('../../utils/util');
-const Role = require('../../models/roleSchema');
 const employeesSchema = require('../../models/employeesSchema');
 const md5 = require('md5');
 
@@ -13,7 +12,7 @@ router.post('/employees/handleEmployee', async (ctx) => {
     const { user } = ctx.state;
     const employee = await employeesSchema.findOne({ phone, belongs: user?.belongs ?? user._id, delFlag: false });
     if (employee && id !== employee._id.toString()) {
-      ctx.body = util.fail('', `此号码已与他人绑定`);
+      ctx.body = util.fail('', '此号码已与他人绑定');
       return;
     }
     if (id) {

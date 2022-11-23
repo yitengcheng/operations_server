@@ -1,4 +1,4 @@
-const { getStylelintConfig } = require('@iceworks/spec');
+const { getStylelintConfig } = require('@applint/spec');
 
-// https://www.npmjs.com/package/@iceworks/spec
-module.exports = getStylelintConfig('common');
+// https://www.npmjs.com/package/@applint/spec
+module.exports = getStylelintConfig('common', {});

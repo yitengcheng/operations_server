@@ -10,8 +10,8 @@ router.post('/goods/goodTable', async (ctx) => {
     const { user } = ctx.state;
     const { params } = ctx.request.body;
     const { page, skipIndex } = util.pager(ctx.request.body);
-    let zeroParams,
-      fuzzyQuery = {};
+    let zeroParams;
+    let fuzzyQuery = {};
     if (params?.keyword) {
       fuzzyQuery = util.fuzzyQuery(['name', 'models'], params?.keyword);
       delete params?.keyword;

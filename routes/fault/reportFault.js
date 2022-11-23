@@ -16,6 +16,7 @@ router.post('/applet/reportFault', async (ctx) => {
   const db = mongoose.createConnection(config.URL);
   try {
     const { data, templateId, assetsId, code } = ctx.request.body;
+    const { user } = ctx.state;
     const companyTemplate = await CompanyTemplate.findById(templateId);
     if (!companyTemplate) {
       ctx.body = util.fail('', '请先设置公司故障模板');

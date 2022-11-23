@@ -24,7 +24,6 @@ const findChildren = async (depart) => {
 
 router.post('/department/departmentTree', async (ctx) => {
   try {
-    const { departmentName, parentId } = ctx.request.body;
     const { user } = ctx.state;
     const departments = await departmentSchema.find({
       belongs: user?.belongs ?? user._id,

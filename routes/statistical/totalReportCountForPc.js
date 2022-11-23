@@ -2,7 +2,6 @@
  * 巡检总数接口
  */
 const router = require('koa-router')();
-const { default: mongoose } = require('mongoose');
 const InspectionReport = require('../../models/inspectionReportSchema');
 const util = require('../../utils/util');
 

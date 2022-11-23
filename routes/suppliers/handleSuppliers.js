@@ -3,9 +3,7 @@
  */
 const router = require('koa-router')();
 const util = require('../../utils/util');
-const Role = require('../../models/roleSchema');
 const supplierSchema = require('../../models/supplierSchema');
-const md5 = require('md5');
 
 router.post('/suppliers/handleSuppliers', async (ctx) => {
   try {
@@ -13,7 +11,7 @@ router.post('/suppliers/handleSuppliers', async (ctx) => {
     const { user } = ctx.state;
     const supplier = await supplierSchema.findOne({ name, belongs: user?.belongs ?? user._id, delFlag: false });
     if (supplier && id !== supplier._id.toString()) {
-      ctx.body = util.fail('', `已有同名供应商`);
+      ctx.body = util.fail('', '已有同名供应商');
       return;
     }
     if (id) {
