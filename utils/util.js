@@ -309,5 +309,12 @@ module.exports = {
     const resPhone = await axios.post(getPhonenumberUrl, getPhonenumberOption);
     return resPhone.data?.phone_info?.phoneNumber ?? '';
   },
+  timeQuery(dateRange = [], key) {
+    let query = {};
+    if (dateRange?.length === 2) {
+      query = { [key]: { $gte: dayjs(dateRange[0]).toDate(), $lte: dayjs(dateRange[1]).toDate() } };
+    }
+    return query;
+  },
   CODE,
 };

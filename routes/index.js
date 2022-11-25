@@ -17,6 +17,7 @@ const suppliers = require('./suppliers');
 const options = require('./options');
 const goods = require('./goods');
 const branchQutas = require('./branchQutas');
+const godownEntry = require('./godownEntry');
 
 const routers = {
   ...users,
@@ -38,6 +39,7 @@ const routers = {
   ...options,
   ...goods,
   ...branchQutas,
+  ...godownEntry,
 };
 
 module.exports = routers;
