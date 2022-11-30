@@ -15,6 +15,7 @@ const CODE = {
   BUSINESS_ERROR: 501, // 业务请求失败
   AUTH_ERROR: 401, // 认证失败或TOKEN过期
 };
+
 const mongoose = require('mongoose');
 
 module.exports = {
@@ -315,6 +316,24 @@ module.exports = {
       query = { [key]: { $gte: dayjs(dateRange[0]).toDate(), $lte: dayjs(dateRange[1]).toDate() } };
     }
     return query;
+  },
+  monthMap(date) {
+    let month = dayjs(date).month();
+    let map = [
+      { jan: 1 },
+      { feb: 1 },
+      { mar: 1 },
+      { apr: 1 },
+      { may: 1 },
+      { jun: 1 },
+      { jul: 1 },
+      { aug: 1 },
+      { sep: 1 },
+      { oct: 1 },
+      { nov: 1 },
+      { dec: 1 },
+    ];
+    return map[month];
   },
   CODE,
 };

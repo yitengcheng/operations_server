@@ -31,7 +31,7 @@ router.post('/godownEntry/invalidGodownEntry', async (ctx) => {
       }
     }
     await godownEntrySchema.findByIdAndUpdate(id, { status: 2 });
-    ctx.body = util.success({}, '修改成功');
+    ctx.body = util.success({}, '作废成功');
   } catch (error) {
     ctx.body = util.fail(error.stack);
   }
