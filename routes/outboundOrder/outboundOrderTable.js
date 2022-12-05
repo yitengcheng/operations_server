@@ -20,7 +20,7 @@ router.post('/outboundOrder/outboundOrderTable', async (ctx) => {
         { path: 'outboundType' },
         { path: 'receiveUser' },
         { path: 'outboundTime' },
-        { path: 'outboundItems', populate: ['goodId'] },
+        { path: 'outboundItems', populate: [{ path: 'goodId', populate: ['unit'] }] },
       ]);
     const total = await outboundOrderSchema.countDocuments({
       ...timeParams,

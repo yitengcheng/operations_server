@@ -1,23 +1,17 @@
 /**
- * 查看出库单接口
+ * 查看审核状态接口
  */
 const router = require('koa-router')();
 const util = require('../../utils/util');
 const outboundOrderSchema = require('../../models/outboundOrderSchema');
 
-router.post('/outboundOrder/outboundOrder', async (ctx) => {
+router.post('/outboundOrder/lookAuditStatus', async (ctx) => {
   try {
     const { id } = ctx.request.body;
     const { user } = ctx.state;
     const outboundOrder = await outboundOrderSchema
       .findById(id)
-      .populate([
-        { path: 'outboundItems', populate: [{ path: 'goodId', populate: ['unit', 'classification', 'supplierId'] }] },
-        { path: 'outboundType' },
-        { path: 'receiveUser' },
-        { path: 'receiveDepartment' },
-        { path: 'voucherUser' },
-      ]);
+      .populate([{ path: 'auditStatusList', populate: [{ path: 'auditUser' }] }]);
     ctx.body = util.success(outboundOrder, '');
   } catch (error) {
     ctx.body = util.fail(error.stack);
