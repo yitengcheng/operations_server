@@ -1,5 +1,5 @@
 /**
- * 删除下属员工接口
+ * 删除物品接口
  */
 const router = require('koa-router')();
 const util = require('../../utils/util');
