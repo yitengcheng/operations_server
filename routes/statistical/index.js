@@ -12,6 +12,9 @@ const totalFaultForPcByDate = require('./totalFaultForPcByDate');
 const totalAssetsByField = require('./totalAssetsByField');
 const totalFaultByField = require('./totalFaultByField');
 const totalFaultByFeildForPc = require('./totalFaultByFeildForPc');
+// 库管统计相关接口
+const stockStatisticalNumber = require('./stockStatisticalNumber');
+const stockWarringStatistical = require('./stockWarringStatistical');
 
 module.exports = {
   inspectionStatistical,
@@ -28,4 +31,6 @@ module.exports = {
   totalAssetsByField,
   totalFaultByField,
   totalFaultByFeildForPc,
+  stockStatisticalNumber,
+  stockWarringStatistical,
 };

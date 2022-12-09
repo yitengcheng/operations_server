@@ -8,6 +8,7 @@ const lookAuditStatus = require('./lookAuditStatus');
 const checkOutboundOrder = require('./checkOutboundOrder');
 const checkOutboundOrderTable = require('./checkOutboundOrderTable');
 const stockRemovalOrder = require('./stockRemovalOrder');
+const accessTable = require('./accessTable');
 
 module.exports = {
   handleOutboundOrder,
@@ -20,4 +21,5 @@ module.exports = {
   checkOutboundOrder,
   checkOutboundOrderTable,
   stockRemovalOrder,
+  accessTable,
 };

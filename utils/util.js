@@ -313,7 +313,9 @@ module.exports = {
   timeQuery(dateRange = [], key) {
     let query = {};
     if (dateRange?.length === 2) {
-      query = { [key]: { $gte: dayjs(dateRange[0]).toDate(), $lte: dayjs(dateRange[1]).toDate() } };
+      query = {
+        [key]: { $gte: dayjs(dateRange[0]).startOf('day').toDate(), $lte: dayjs(dateRange[1]).endOf('day').toDate() },
+      };
     }
     return query;
   },
