@@ -35,7 +35,7 @@ router.post('/customer/insert', async (ctx) => {
     } else {
       await customerSchema.create({
         name,
-        password: md5(password ?? '123456'),
+        password: md5(password ? password : '123456'),
         username,
         address,
         phone,
