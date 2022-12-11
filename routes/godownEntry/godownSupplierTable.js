@@ -7,7 +7,7 @@ const godownEntryItemSchema = require('../../models/godownEntryItemSchema');
 const util = require('../../utils/util');
 const lodash = require('lodash');
 
-router.post('/godownEntry/supplierTable', async (ctx) => {
+router.post('/godownEntry/godownSupplierTable', async (ctx) => {
   try {
     const { user } = ctx.state;
     const { params } = ctx.request.body;
