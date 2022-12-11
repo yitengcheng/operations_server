@@ -16,10 +16,18 @@ router.post('/department/handleDepartment', async (ctx) => {
       return;
     }
     if (id) {
-      await departmentSchema.updateOne({ _id: id, delFlag: false }, { departmentName, parentId });
+      await departmentSchema.updateOne(
+        { _id: id, delFlag: false },
+        { departmentName, parentId: parentId ? parentId : undefined },
+      );
       ctx.body = util.success({}, '修改成功');
     } else {
-      await departmentSchema.create({ departmentName, belongs: user?.belongs ?? user._id, parentId, delFlag: false });
+      await departmentSchema.create({
+        departmentName,
+        belongs: user?.belongs ?? user._id,
+        parentId: parentId ? parentId : undefined,
+        delFlag: false,
+      });
       ctx.body = util.success({}, '添加成功');
     }
   } catch (error) {
