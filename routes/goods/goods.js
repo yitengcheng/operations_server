@@ -9,8 +9,12 @@ router.post('/goods/goods', async (ctx) => {
   try {
     const { user } = ctx.state;
     const { supplierId } = ctx.request.body;
+    let params = {};
+    if (supplierId) {
+      params = { supplierId };
+    }
     const res = await goodsSchema
-      .find({ supplierId, belongs: user?.belongs ?? user._id, delFlag: false })
+      .find({ ...params, belongs: user?.belongs ?? user._id, delFlag: false })
       .populate(['supplierId', 'unit', 'classification']);
     ctx.body = util.success(res);
   } catch (error) {
