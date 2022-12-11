@@ -40,17 +40,21 @@ router.post('/outboundOrder/applyOutboundOrder', async (ctx) => {
       outboundItems.push(res._id);
     }
     let auditStatusList = [];
+    let status = 1;
     const localAuditList = await auditUserSchema.findOne({ belongs: user?.belongs ?? user._id });
-    console.log('----------', localAuditList);
-    for (const localAudit of localAuditList?.auditUserList) {
-      const res = await auditStatusSchema.create({
-        belongs: user?.belongs ?? user._id,
-        delFlag: false,
-        auditUser: localAudit,
-        auditStatus: 1,
-        outboundOrderId: newOutboundOrder._id,
-      });
-      auditStatusList.push(res._id);
+    if (localAuditList?.auditUserList) {
+      for (const localAudit of localAuditList?.auditUserList) {
+        const res = await auditStatusSchema.create({
+          belongs: user?.belongs ?? user._id,
+          delFlag: false,
+          auditUser: localAudit,
+          auditStatus: 1,
+          outboundOrderId: newOutboundOrder._id,
+        });
+        auditStatusList.push(res._id);
+      }
+    } else {
+      status = 3;
     }
     await outboundOrderSchema.updateOne(
       { _id: newOutboundOrder._id },
@@ -61,8 +65,10 @@ router.post('/outboundOrder/applyOutboundOrder', async (ctx) => {
         amountTotal: lodash.sumBy(goodIds, (o) => {
           return o.goodNum * o.price;
         }),
+        status: status,
       },
     );
+
     ctx.body = util.success({}, '物品已申领，请等待审核');
   } catch (error) {
     ctx.body = util.fail(error.stack);
