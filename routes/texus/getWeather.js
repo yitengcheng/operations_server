@@ -7,7 +7,11 @@ const util = require('../../utils/util');
 
 router.post('/test/getWeather', async (ctx) => {
   try {
-    const { ip } = ctx.request.body;
+    let ip =
+      ctx.req.headers['x-forwarded-for'] ||
+      ctx.req.connection.remoteAddress ||
+      ctx.req.socket.remoteAddress ||
+      ctx.req.connection.socket.remoteAddress;
     const gdKey = '10d0f72d75258bae2bf4341ab981eda2';
     const ipResponse = await axios.get(`https://restapi.amap.com/v3/ip?ip=${ip}&output=json&key=${gdKey}`);
     const adcode = ipResponse?.data?.adcode;
@@ -17,7 +21,7 @@ router.post('/test/getWeather', async (ctx) => {
     if (weatherResponse?.data?.lives) {
       ctx.body = util.success(weatherResponse?.data?.lives[0]);
     } else {
-      ctx.body = util.fail({}, '天气查询失败');
+      ctx.body = util.success({}, '');
     }
   } catch (error) {
     ctx.body = util.fail(error.stack);
