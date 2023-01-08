@@ -16,6 +16,8 @@ require('./config/db'); // 加载数据库
 // error handler
 onerror(app);
 
+app.proxy = true;
+
 // middlewares
 app.use(
   bodyparser({
