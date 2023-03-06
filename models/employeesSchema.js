@@ -8,6 +8,7 @@ const schema = mongoose.Schema({
   departmentId: { type: mongoose.Types.ObjectId, ref: 'departments' }, // 所属部门
   belongs: { type: mongoose.Types.ObjectId, ref: 'customers' }, // 所属
   name: String, // 姓名
+  account: String, // 登录账号
   phone: String, // 联系电话
   password: String, // 登录密码
   type: Number, // 员工类型： 1 管理者 2 普通员工

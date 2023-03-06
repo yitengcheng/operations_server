@@ -12,7 +12,7 @@ const employeesSchema = require('../../models/employeesSchema');
 
 router.post('/app/login', async (ctx) => {
   try {
-    const { username, password, registrationId } = ctx.request.body;
+    const { username, password, registrationId, platform } = ctx.request.body;
     /**
      * 返回数据库指定字段
      * 通过字段的对象1代表返回0代表不返回{ userId: 1, _id: 0}
@@ -34,11 +34,16 @@ router.post('/app/login', async (ctx) => {
         },
       },
     ).populate('roleId', { name: 1 });
-    if (!res) {
+    if (platform === 'stock') {
+      res = await employeesSchema.findOne(
+        { $or: [{ phone: username }, { account: username }], password: md5(password) },
+        { password: 0 },
+      );
+      if (!res) {
+        res = await customerSchema.findOne({ username, password: md5(password) }, { password: 0 });
+      }
+    } else {
       res = await customerSchema.findOne({ username, password: md5(password) }, { password: 0 });
-    }
-    if (!res) {
-      res = await employeesSchema.findOne({ phone: username, password: md5(password) }, { password: 0 });
     }
     const token = jwt.sign({ ...res?._doc }, 'cdxs', { expiresIn: '24h' });
     if (res) {
