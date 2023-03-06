@@ -8,7 +8,7 @@ const md5 = require('md5');
 
 router.post('/employees/handleEmployee', async (ctx) => {
   try {
-    const { departmentId, name, phone, id, password, type, remark } = ctx.request.body;
+    const { departmentId, name, phone, id, password, type, remark, account } = ctx.request.body;
     const { user } = ctx.state;
     const employee = await employeesSchema.findOne({ phone, belongs: user?.belongs ?? user._id, delFlag: false });
     if (employee && id !== employee._id.toString()) {
@@ -18,12 +18,13 @@ router.post('/employees/handleEmployee', async (ctx) => {
     if (id) {
       await employeesSchema.updateOne(
         { _id: id, delFlag: false },
-        { departmentId, name, phone, type, password: password ? md5(password) : undefined, remark },
+        { account, departmentId, name, phone, type, password: password ? md5(password) : undefined, remark },
       );
       ctx.body = util.success({}, '修改成功');
     } else {
       await employeesSchema.create({
         departmentId,
+        account,
         name,
         phone,
         type,
