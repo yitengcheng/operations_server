@@ -16,6 +16,9 @@ const schema = mongoose.Schema({
   inventoryMin: Number, // 库存下限
   supplierId: { type: mongoose.Types.ObjectId, ref: 'suppliers' }, // 供应商
   remark: String, // 备注
+  hasFixed: Boolean, // 是否为固定资产
+  brand: String, // 品牌
+  fixedNumber: String, //固定资产编号
 });
 
 module.exports = mongoose.model('goods', schema, 'goods'); // 模型名 schema 数据库集合名
