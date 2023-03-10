@@ -41,6 +41,7 @@ router.post('/customer/insert', async (ctx) => {
         phone,
         headName,
         companyId: user.companyId,
+        type: 1,
       });
       ctx.body = util.success({}, '添加成功');
     }

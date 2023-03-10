@@ -11,6 +11,7 @@ const schema = mongoose.Schema({
   address: String, // 公司地址
   phone: String, // 联系方式
   headName: String, // 负责人
+  type: Number, // 角色类型
 });
 
 module.exports = mongoose.model('customers', schema, 'customers'); // 模型名 schema 数据库集合名
