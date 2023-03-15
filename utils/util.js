@@ -337,5 +337,10 @@ module.exports = {
     ];
     return map[month];
   },
+  showOption(option, value, place) {
+    const obj = _.find(option, (itme) => itme.value === value);
+    let placeString = place ?? '暂无';
+    return obj?.label ?? placeString;
+  },
   CODE,
 };

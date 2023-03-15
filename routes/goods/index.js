@@ -6,6 +6,11 @@ const good = require('./good');
 const goodWarringTable = require('./goodWarringTable');
 const goodChangeTable = require('./goodChangeTable');
 const goodBalanceTable = require('./goodBalanceTable');
+const downGood = require('./downGood');
+const insertGoods = require('./insertGoods');
+const downGoodWarringTable = require('./downGoodWarringTable');
+const downGoodChangeTable = require('./downGoodChangeTable');
+const downGoodBalanceTable = require('./downGoodBalanceTable');
 
 module.exports = {
   handleGood,
@@ -16,4 +21,9 @@ module.exports = {
   goodWarringTable,
   goodChangeTable,
   goodBalanceTable,
+  downGood,
+  insertGoods,
+  downGoodWarringTable,
+  downGoodChangeTable,
+  downGoodBalanceTable,
 };

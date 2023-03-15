@@ -9,6 +9,9 @@ const checkOutboundOrder = require('./checkOutboundOrder');
 const checkOutboundOrderTable = require('./checkOutboundOrderTable');
 const stockRemovalOrder = require('./stockRemovalOrder');
 const accessTable = require('./accessTable');
+const downAccessTable = require('./downAccessTable');
+const downOutboundOrderTable = require('./downOutboundOrderTable');
+const inserOutboundOrder = require('./inserOutboundOrder');
 
 module.exports = {
   handleOutboundOrder,
@@ -22,4 +25,7 @@ module.exports = {
   checkOutboundOrderTable,
   stockRemovalOrder,
   accessTable,
+  downAccessTable,
+  downOutboundOrderTable,
+  inserOutboundOrder,
 };

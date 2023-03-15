@@ -10,9 +10,9 @@ router.post('/employees/handleEmployee', async (ctx) => {
   try {
     const { departmentId, name, phone, id, password, type, remark, account } = ctx.request.body;
     const { user } = ctx.state;
-    const employee = await employeesSchema.findOne({ phone, belongs: user?.belongs ?? user._id, delFlag: false });
+    const employee = await employeesSchema.findOne({ account, belongs: user?.belongs ?? user._id, delFlag: false });
     if (employee && id !== employee._id.toString()) {
-      ctx.body = util.fail('', '此号码已与他人绑定');
+      ctx.body = util.fail('', '此账号已与他人绑定');
       return;
     }
     if (id) {

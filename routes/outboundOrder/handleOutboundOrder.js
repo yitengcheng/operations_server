@@ -39,7 +39,7 @@ router.post('/outboundOrder/handleOutboundOrder', async (ctx) => {
         goodId: good?.id,
         goodNum: good?.goodNum,
       });
-      const localGood = await goodsSchema.findById(good?.id);
+      const localGood = await goodsSchema.findById(good?._id);
       if (localGood?.inventoryNumber < good?.goodNum) {
         await outboundOrderItemSchema.remove({ outboundOrderId: newOutboundOrder._id });
         await outboundOrderSchema.remove({ _id: newOutboundOrder._id });

@@ -31,10 +31,10 @@ router.post('/godownEntry/handleGodownEntry', async (ctx) => {
         delFlag: false,
         godownEntryId: newGodownEntry._id,
         remark: hasSynchronous ? remark : '',
-        goodId: good?.id,
+        goodId: good?._id,
         goodNum: good?.goodNum,
       });
-      await goodsSchema.findByIdAndUpdate(good?.id, { $inc: { inventoryNumber: good?.goodNum } });
+      await goodsSchema.findByIdAndUpdate(good?._id, { $inc: { inventoryNumber: good?.goodNum } });
       godownEntryIds.push(res._id);
     }
     await godownEntrySchema.updateOne(
