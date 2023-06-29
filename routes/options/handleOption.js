@@ -7,7 +7,7 @@ const optionSchema = require('../../models/optionSchema');
 
 router.post('/options/handleOption', async (ctx) => {
   try {
-    const { id, name, type, remark } = ctx.request.body;
+    const { id, name, type, remark, hasShare = false } = ctx.request.body;
     const { user } = ctx.state;
     const option = await optionSchema.findOne({ name, belongs: user?.belongs ?? user._id, delFlag: false });
     if (option && id !== option._id.toString()) {
@@ -15,7 +15,7 @@ router.post('/options/handleOption', async (ctx) => {
       return;
     }
     if (id) {
-      await optionSchema.updateOne({ _id: id, delFlag: false }, { name, type, remark });
+      await optionSchema.updateOne({ _id: id, delFlag: false }, { name, type, remark, hasShare });
       ctx.body = util.success({}, '修改成功');
     } else {
       await optionSchema.create({
@@ -24,6 +24,7 @@ router.post('/options/handleOption', async (ctx) => {
         remark,
         belongs: user?.belongs ?? user._id,
         delFlag: false,
+        hasShare,
       });
       ctx.body = util.success({}, '添加成功');
     }

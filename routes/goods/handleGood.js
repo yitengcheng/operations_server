@@ -8,7 +8,7 @@ const dayjs = require('dayjs');
 
 router.post('/goods/handleGood', async (ctx) => {
   try {
-    const {
+    let {
       name,
       models,
       unit,
@@ -22,11 +22,11 @@ router.post('/goods/handleGood', async (ctx) => {
       hasFixed,
       brand,
       id,
+      fixedNumber,
     } = ctx.request.body;
     const { user } = ctx.state;
     if (id) {
       let good = await goodsSchema.findById(id);
-      let fixedNumber = good?.fixedNumber;
       if (hasFixed && !good?.fixedNumber) {
         fixedNumber = `GD${dayjs().format('YYYYMMDDHHmmss')}`;
       }
@@ -49,7 +49,6 @@ router.post('/goods/handleGood', async (ctx) => {
       );
       ctx.body = util.success({}, '修改成功');
     } else {
-      let fixedNumber;
       if (hasFixed) {
         fixedNumber = `GD${dayjs().format('YYYYMMDDHHmmss')}`;
       }
