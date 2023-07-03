@@ -11,6 +11,7 @@ const insertGoods = require('./insertGoods');
 const downGoodWarringTable = require('./downGoodWarringTable');
 const downGoodChangeTable = require('./downGoodChangeTable');
 const downGoodBalanceTable = require('./downGoodBalanceTable');
+const goodShareList = require('./goodShareList');
 
 module.exports = {
   handleGood,
@@ -26,4 +27,5 @@ module.exports = {
   downGoodWarringTable,
   downGoodChangeTable,
   downGoodBalanceTable,
+  goodShareList,
 };

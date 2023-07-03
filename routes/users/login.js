@@ -31,6 +31,7 @@ router.post('/app/login', async (ctx) => {
           companyId: 1,
           roleId: 1,
           avatar: 1,
+          customerList: 1,
         },
       },
     ).populate('roleId', { name: 1 });
