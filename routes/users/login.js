@@ -34,7 +34,7 @@ router.post('/app/login', async (ctx) => {
           customerList: 1,
         },
       },
-    ).populate('roleId', { name: 1 });
+    ).populate([{ path: 'roleId', populate: ['name'] }, { path: 'customerList' }]);
     if (platform === 'stock') {
       res = await employeesSchema.findOne(
         { $or: [{ phone: username }, { account: username }], password: md5(password) },

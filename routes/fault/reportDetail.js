@@ -4,6 +4,7 @@
 const router = require('koa-router')();
 const CompanyTemplate = require('../../models/companyTemplateSchema');
 const User = require('../../models/userSchema');
+const goodsSchema = require('../../models/goodsSchema');
 const util = require('../../utils/util');
 const mongoose = require('mongoose');
 const config = require('../../config');
@@ -34,7 +35,10 @@ router.post('/fault/detail', async (ctx) => {
     let faultModule = db.model(faultTemplate.moduleName, guzhangSchema, faultTemplate.moduleName);
     let assetModule = db.model(assetTemplate.moduleName, assetSchema, assetTemplate.moduleName);
     const fault = await faultModule.findById(faultId);
-    const asset = await assetModule.findById(fault.assetsId, assetSelect);
+    let asset = await assetModule.findById(fault.assetsId, assetSelect);
+    if (!asset) {
+      asset = await goodsSchema.findById(fault.assetsId);
+    }
     const dispose = await User.findById(fault.dispose);
     ctx.body = util.success({ fault, asset, dispose });
   } catch (error) {
