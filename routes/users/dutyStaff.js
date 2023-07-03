@@ -1,5 +1,5 @@
 /**
- * 获取可值班员工
+ * 获取运维员工
  */
 const router = require('koa-router')();
 const User = require('../../models/userSchema');

@@ -19,6 +19,7 @@ const schema = mongoose.Schema({
     default: 0,
   },
   loginDate: String, // 上次登录时间
+  customerList: [{ type: mongoose.Types.ObjectId, ref: 'customers', default: [] }], // 运维人员负责的客户
 });
 
 module.exports = mongoose.model('users', schema, 'users'); // 模型名 schema 数据库集合名
