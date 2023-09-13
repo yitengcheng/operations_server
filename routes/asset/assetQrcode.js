@@ -34,7 +34,8 @@ router.post('/assets/downOneQr', async (ctx) => {
       }),
     );
     const qrImage = await sharp(
-      qr.imageSync(`https://yyyw.qiantur.com/applet/companyId=${user.companyId}&assetsId=${id}`, { type: 'png' }),
+      // qr.imageSync(`https://yyyw.qiantur.com/applet/companyId=${user.companyId}&assetsId=${id}`, { type: 'png' }),
+      qr.imageSync(`http://115.236.93.161:8084/applet/companyId=${user.companyId}&assetsId=${id}`, { type: 'png' }),
     )
       .resize({ width: 520, height: 520 })
       .toBuffer();

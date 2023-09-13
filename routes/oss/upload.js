@@ -49,9 +49,10 @@ router.post(
   async (ctx) => {
     try {
       const { file } = ctx.request.files;
-      const url = await fileUpload(file);
-      fs.unlinkSync(file.path);
-      ctx.body = util.success({ url });
+      // const url = await fileUpload(file);
+      // fs.unlinkSync(file.path);
+      let fileExtension = file.path.substring(file.path.lastIndexOf('/'));
+      ctx.body = util.success({ url: fileExtension });
     } catch (error) {
       ctx.body = util.fail(error.stack);
     }

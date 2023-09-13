@@ -43,7 +43,10 @@ router.post('/assets/downQr', async (ctx) => {
         }),
       );
       const qrImage = await sharp(
-        qr.imageSync(`https://yyyw.qiantur.com/applet/companyId=${user.companyId}&assetsId=${asset._id}`, {
+        // qr.imageSync(`https://yyyw.qiantur.com/applet/companyId=${user.companyId}&assetsId=${asset._id}`, {
+        //   type: 'png',
+        // }),
+        qr.imageSync(`http://115.236.93.161:8084/applet/companyId=${user.companyId}&assetsId=${asset._id}`, {
           type: 'png',
         }),
       )
